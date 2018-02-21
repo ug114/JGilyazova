@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QuadraticEquation
 {
-    class Program
+    class QuadraticEquation
     {
         static void Main(string[] args)
         {
