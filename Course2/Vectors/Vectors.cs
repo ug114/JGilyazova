@@ -12,17 +12,17 @@ namespace Vectors
 
         public Vector(int n)
         {
-            //try
-            //{
-            //    if (n <= 0)
-            //    {
-            //        throw new IllegalArgumentException();
-            //    }
-            //}
-            //catch (IllegalArgumentException)
-            //{
-            //    Console.WriteLine("Exception");
-            //}
+            try
+            {
+                if (n <= 0)
+                {
+                    throw new ArgumentException();
+                }
+            }
+            catch (ArgumentException)
+            {
+                Console.WriteLine("Exception");
+            }
             this.components = new double[n];
             for (int i = 0; i < n; i++)
             {
@@ -89,9 +89,19 @@ namespace Vectors
 
         public Vector GetSum(Vector vector2)
         {
-            for (int i = 0; i < this.getSize(); i++)
+            if (vector2.getSize() < this.getSize())
             {
-                this.components[i] += vector2.components[i];
+                for (int i = 0; i < vector2.getSize(); i++)
+                {
+                    this.components[i] += vector2.components[i];
+                }
+            }
+            else
+            {
+                for (int i = 0; i < this.getSize(); i++)
+                {
+                    this.components[i] += vector2.components[i];
+                }
             }
             return this;
         }
@@ -153,14 +163,14 @@ namespace Vectors
             return sum;
         }
 
-        //}
-        //static void Main(string[] args)
-        //{
-        //    double[] array = { 1, 2, 0 };
-        //    Vector vector2 = new Vector(3);
-        //    Vector vector1 = new Vector(array);
-        //    Console.WriteLine("{0}, {1}, {2}", vector1.getSize(), vector1.GetSum(vector2).toString(), vector1.GetMultiplication(2).toString());
+        static void Main(string[] args)
+        {
+            double[] array = { 1, 2, 0 };
+            Vector vector5 = new Vector(0);
+            Vector vector1 = new Vector(array);
+            //Console.WriteLine("{0}, {1}, {2}", vector1.getSize(), vector1.GetSum(vector2).toString(), vector1.GetMultiplication(2).toString());
 
-        //}
+        }
     }
 }
+

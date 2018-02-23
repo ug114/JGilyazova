@@ -271,32 +271,32 @@ namespace Vectors
             return outputMatrix;
         }
 
-        static void Main(string[] args)
-        {
-            Matrix matrix1 = new Matrix(2, 2);
-            Matrix matrix2 = new Matrix(matrix1);
-            double[,] array = { { 1, 2 }, { 3, 4 } };
-            Matrix matrix3 = new Matrix(array);
-            double[] array1 = { 1, 2, 3 };
-            Vector v1 = new Vector(array1);
-            double[] array2 = { 2, 4, 6 };
-            Vector v2 = new Vector(array2);
-            Vector[] varray = { v1, v2 };
-            Matrix matrix4 = new Matrix(varray);
-            matrix4.Multiple(2);
-            Console.WriteLine(matrix3.toString());
-            Console.WriteLine(matrix4.toString());
-            Console.WriteLine(Multiplicate(matrix3, matrix4).toString());
+        //static void Main(string[] args)
+        //{
+        //    Matrix matrix1 = new Matrix(2, 2);
+        //    Matrix matrix2 = new Matrix(matrix1);
+        //    double[,] array = { { 1, 2 }, { 3, 4 } };
+        //    Matrix matrix3 = new Matrix(array);
+        //    double[] array1 = { 1, 2, 3 };
+        //    Vector v1 = new Vector(array1);
+        //    double[] array2 = { 2, 4, 6 };
+        //    Vector v2 = new Vector(array2);
+        //    Vector[] varray = { v1, v2 };
+        //    Matrix matrix4 = new Matrix(varray);
+        //    matrix4.Multiple(2);
+        //    Console.WriteLine(matrix3.toString());
+        //    Console.WriteLine(matrix4.toString());
+        //    Console.WriteLine(Multiplicate(matrix3, matrix4).toString());
 
-            //for (int i = 0; i < 2; i++)
-            //{
-            //    for (int j = 0; j < 3; j++)
-            //    {
-            //        Console.Write(" {0}", matrix4.array[i].GetComponent(j));
-            //    }
-            //    Console.WriteLine();
-            //}
-            //Console.WriteLine(matrix4.MultipleVector(v1).toString());
-        }
+        //    //for (int i = 0; i < 2; i++)
+        //    //{
+        //    //    for (int j = 0; j < 3; j++)
+        //    //    {
+        //    //        Console.Write(" {0}", matrix4.array[i].GetComponent(j));
+        //    //    }
+        //    //    Console.WriteLine();
+        //    //}
+        //    //Console.WriteLine(matrix4.MultipleVector(v1).toString());
+        //}
     }
 }
