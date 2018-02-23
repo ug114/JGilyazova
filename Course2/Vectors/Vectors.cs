@@ -78,13 +78,14 @@ namespace Vectors
 
         public string toString()
         {
-            string outputString = this.components[0].ToString();
+            string outputString = "{" + this.components[0].ToString();
 
             for (int i = 1; i < this.getSize(); i++)
             {
-                outputString = outputString + " ," + this.components[i];
+                outputString = outputString + ", " + this.components[i];
             }
-            return outputString;
+
+            return outputString + "}";
         }
 
         public Vector GetSum(Vector vector2)
@@ -108,14 +109,24 @@ namespace Vectors
 
         public Vector GetDifference(Vector vector2)
         {
-            for (int i = 0; i < this.getSize(); i++)
+            if (vector2.getSize() < this.getSize())
             {
-                this.components[i] -= vector2.components[i];
+                for (int i = 0; i < vector2.getSize(); i++)
+                {
+                    this.components[i] += vector2.components[i];
+                }
+            }
+            else
+            {
+                for (int i = 0; i < this.getSize(); i++)
+                {
+                    this.components[i] -= vector2.components[i];
+                }
             }
             return this;
         }
 
-        public Vector GetMultiplication(double scalar)
+        public Vector MultiplyByScalar(double scalar)
         {
             for (int i = 0; i < this.getSize(); i++)
             {
@@ -145,31 +156,82 @@ namespace Vectors
 
         public static Vector GetSum(Vector vector1, Vector vector2)
         {
-            return vector1.GetSum(vector2);
+            if (vector1.getSize() < vector2.getSize())
+            {
+                return vector2.GetSum(vector1);
+            }
+            else
+            {
+                return vector1.GetSum(vector2);
+            }
         }
 
         public static Vector GetDifference(Vector vector1, Vector vector2)
         {
-            return vector1.GetDifference(vector2);
+            if (vector1.getSize() < vector2.getSize())
+            {
+                return vector2.GetDifference(vector1);
+            }
+            else
+            {
+                return vector1.GetDifference(vector2);
+            }
         }
 
-        public static double GetMultiple(Vector vector1, Vector vector2)
+        public static double GetScalarMultiplication(Vector vector1, Vector vector2)
         {
             double sum = 0;
-            for (int i = 0; i < vector1.getSize(); i++)
+
+            for (int i = 0; i < Math.Min(vector1.getSize(), vector2.getSize()); i++)
             {
                 sum += vector1.components[i] * vector2.components[i];
             }
+
             return sum;
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            Vector vector = obj as Vector;
+            if (vector as Vector == null)
+            {
+                return false;
+            }
+
+            if (vector.getSize() != this.getSize())
+            {
+                return false;
+            }
+            else
+            {
+                for (int i = 0; i < this.getSize(); i++)
+                {
+                    if (vector.GetComponent(i) != this.GetComponent(i))
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        }
+
+        //public override int GetHashCode()
+        //{
+        //    return (int);
+        //}
+
         static void Main(string[] args)
         {
-            double[] array = { 1, 2, 0 };
-            Vector vector5 = new Vector(0);
-            Vector vector1 = new Vector(array);
-            //Console.WriteLine("{0}, {1}, {2}", vector1.getSize(), vector1.GetSum(vector2).toString(), vector1.GetMultiplication(2).toString());
-
+            Vector vector1 = new Vector(0);
+            Vector vector2 = new Vector(new double[] { 1, 2, 0 });
+            Vector vector3 = new Vector(new double[] { 1, 1 });
+            Console.WriteLine("{0}, {1}, {2}", vector2.getSize(), vector2.GetSum(vector3).toString(), vector2.MultiplyByScalar(2).toString());
         }
     }
 }
