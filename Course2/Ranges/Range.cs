@@ -104,9 +104,9 @@ namespace Ranges
         {
             Range range1 = new Range(1, 2);
             Range range2 = new Range(1, 1.5);
-            Console.WriteLine("Длина интервала равна {0}.", range1.Length);
-            double number = 10.0;
 
+            Console.WriteLine("Длина интервала равна {0}.", range1.Length);
+            
             Range rangeResult = Range.GetIntersection(range1, range2);
             
             Range[] arrayResult = Range.GetDifference(range1, range2);
@@ -115,7 +115,7 @@ namespace Ranges
             {
                 foreach (Range range in arrayResult)
                 {
-                    Console.WriteLine(range.From + "," + range.To);
+                    Console.WriteLine(range.From + ", " + range.To);
                 }
             }
             else
@@ -123,6 +123,7 @@ namespace Ranges
                 Console.WriteLine(0);
             }
 
+            double number = 10.0;
             if (range1.IsInside(number))
             {
                 Console.WriteLine("Число {0} внутри диапазона от {1} до {2}.", number, range1.From, range1.To);

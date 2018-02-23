@@ -16,7 +16,7 @@ namespace Shapes
             double getPerimeter();
         }
 
-        class Square : Shape
+        class Square : Shape, IComparable
         {
             private double lengthOfSide;
 
@@ -44,9 +44,40 @@ namespace Shapes
             {
                 return this.lengthOfSide * 4;
             }
+
+            public override string ToString()
+            {
+                return lengthOfSide.ToString();
+            }
+
+            public int CompareTo(object obj)
+            {
+                return 0;
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (obj == null)
+                {
+                    return false;
+                }
+                    
+                Square square = obj as Square; 
+                if (square as Square == null)
+                {
+                    return false;
+                }
+                
+                return square.lengthOfSide == this.lengthOfSide;
+            }
+
+            public override int GetHashCode()
+            {
+                return (int)lengthOfSide;
+            }
         }
 
-        class Triangle : Shape
+        class Triangle : Shape, IComparable
         {
             private double x1, x2, x3, y1, y2, y3;
 
@@ -95,9 +126,40 @@ namespace Shapes
                 double c = Math.Sqrt(Math.Pow(x2 - x3, 2) + Math.Pow(y2 - y3, 2));
                 return a + b + c;
             }
+
+            public override string ToString()
+            {
+                return "((" + x1 + ", " + y1 + "), (" + x2 + ", " + y2 + "),(" + x3 + ", " + y3 + "))";
+            }
+
+            public int CompareTo(object obj)
+            {
+                return 0;
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (obj == null)
+                {
+                    return false;
+                }
+
+                Triangle triangle = obj as Triangle;
+                if (triangle as Triangle == null)
+                {
+                    return false;
+                }
+
+                return triangle.x1 == this.x1 && triangle.x2 == this.x2 && triangle.x3 == this.x3 && triangle.y1 == this.y1 && triangle.y2 == this.y2 && triangle.y3 == this.y3;
+            }
+
+            public override int GetHashCode()
+            {
+                return (int)(x1 * x2 * x3 * y1 * y2 * y3);
+            }
         }
 
-        class Rectangle : Shape
+        class Rectangle : Shape, IComparable
         {
             private double lengthOfFirstSide;
             private double lengthOfSecondSide;
@@ -127,9 +189,40 @@ namespace Shapes
             {
                 return 2 * (this.lengthOfFirstSide + this.lengthOfSecondSide);
             }
+
+            public override string ToString()
+            {
+                return lengthOfFirstSide + ", " + lengthOfSecondSide;
+            }
+            
+            public int CompareTo(Object obj)
+            {
+                return 0;
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (obj == null)
+                {
+                    return false;
+                }
+
+                Rectangle rectangle = obj as Rectangle;
+                if (rectangle as Rectangle == null)
+                {
+                    return false;
+                }
+
+                return rectangle.lengthOfFirstSide == this.lengthOfFirstSide && rectangle.lengthOfSecondSide == this.lengthOfSecondSide;
+            }
+
+            public override int GetHashCode()
+            {
+                return (int)(lengthOfFirstSide * lengthOfSecondSide);
+            }
         }
 
-        class Circle : Shape
+        class Circle : Shape, IComparable
         {
             private double radius;
 
@@ -157,51 +250,55 @@ namespace Shapes
             {
                 return 2 * Math.PI * radius;
             }
+            
+            public override string ToString()
+            {
+                return radius.ToString();
+            }
+
+            public int CompareTo(Object obj)
+            {
+                return 0;
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (obj == null)
+                {
+                    return false;
+                }
+
+                Circle circle = obj as Circle;
+                if (circle as Circle == null)
+                {
+                    return false;
+                }
+
+                return circle.radius == this.radius;
+            }
+
+            public override int GetHashCode()
+            {
+                return (int)radius;
+            }
         }
-
-        //public Shape FindMaxArea(Shape[] array)
-        //{
-        //    double max = 0;
-        //    int indexOfMax = 0;
-        //    for (int i = 0; i < array.Length; i++)
-        //    {
-        //        if (array[i].getArea() > max)
-        //        {
-        //            max = array[i].getArea();
-        //            indexOfMax = i;
-        //        }
-        //    }
-
-        //    return array[indexOfMax];
-        //}
-
-        //public Shape FindSecondMaxPerimeter(Shape[] array)
-        //{
-        //    double max = 0;
-        //    int indexOfMax = 0;
-        //    for (int i = 0; i < array.Length; i++)
-        //    {
-        //        if (array[i].getPerimeter() > max)
-        //        {
-        //            max = array[i].getArea();
-        //            indexOfMax = i;
-        //        }
-        //    }
-
-        //    return array[indexOfMax];
-        //}
 
         static void Main(string[] args)
         {
             Square firstSquare = new Square(4);
             Square secondSquare = new Square(3);
+
             Triangle firstTriangle = new Triangle(1, 2, 7, 2, 5, 7);
             Triangle secondTriangle = new Triangle(0, 0, 4, 2, 5, 7);
+
             Rectangle firstRectangle = new Rectangle(3, 5);
             Rectangle secondRectangle = new Rectangle(1, 2);
+
             Circle firstCircle = new Circle(2);
             Circle secondCircle = new Circle(8);
-            //Console.WriteLine(firstRectangle.getArea());
+
+            Console.WriteLine(firstRectangle.getArea());
+
             Shape[] array = { firstSquare, secondSquare, firstTriangle, secondTriangle, firstRectangle, secondRectangle, firstCircle, secondCircle };
         }
     }
