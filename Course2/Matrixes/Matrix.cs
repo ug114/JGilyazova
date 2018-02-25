@@ -215,6 +215,69 @@ namespace Matrixes
             }
         }
 
+        public double GetDeterminant()
+        {
+            int arrayLength = this.array.GetLength(0);
+            int tempIndex = 0;
+            int numberOfChanges = 0;
+            int numberOfStep = 0;
+
+            while (numberOfStep != arrayLength - 1)
+            {
+                bool firstIsNull = true;
+
+                for (int i = numberOfStep; i < arrayLength; i++)
+                {
+                    if (this.array[i].GetComponent(numberOfStep) != 0)
+                    {
+                        firstIsNull = false;
+                        tempIndex = i;
+                        break;
+                    }
+                }
+
+                if (firstIsNull)
+                {
+                    return 0;
+                }
+                else
+                {
+                    if (tempIndex != numberOfStep)
+                    {
+                        for (int i = numberOfStep; i < arrayLength; i++)
+                        {
+                            double temp = this.array[tempIndex].GetComponent(i);
+                            this.array[tempIndex].SetComponent(i, this.array[numberOfStep].GetComponent(i));
+                            this.array[numberOfStep].SetComponent(i, temp);
+                        }
+
+                        numberOfChanges++;
+                    }
+
+                    for (int i = numberOfStep + 1; i < arrayLength; i++)
+                    {
+                        double coefficient = this.array[i].GetComponent(numberOfStep) / this.array[numberOfStep].GetComponent(numberOfStep);
+
+                        for (int j = numberOfStep; j < arrayLength; j++)
+                        {
+                            this.array[i].SetComponent(j, this.array[i].GetComponent(j) - this.array[numberOfStep].GetComponent(j) * coefficient);
+                        }
+                    }
+                }
+
+                numberOfStep++;
+            }
+
+            double det = this.array[0].GetComponent(0);
+
+            for (int i = 1; i < arrayLength; i++)
+            {
+                det *= this.array[i].GetComponent(i);
+            }
+
+            return det * Math.Pow(-1, numberOfChanges);
+        }
+
         public static Matrix Sum(Matrix matrix1, Matrix matrix2)
         {
             int n = matrix1.GetSizeOfMatrix()[0];
@@ -266,7 +329,6 @@ namespace Matrixes
                     outputMatrix.array[i].SetComponent(j, sum);
                     sum = 0;
                 }
-
             }
             return outputMatrix;
         }
@@ -286,7 +348,7 @@ namespace Matrixes
             Console.WriteLine(matrix3.toString());
             Console.WriteLine(matrix4.toString());
             Console.WriteLine(Multiplicate(matrix3, matrix4).toString());
-
+            Console.WriteLine(matrix3.GetDeterminant());
             //for (int i = 0; i < 2; i++)
             //{
             //    for (int j = 0; j < 3; j++)
