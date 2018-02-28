@@ -8,57 +8,33 @@ namespace Ranges
 {
     class Range
     {
-        private double to;
-        private double from;
-
-        public Range(double from, double to)
+        public double From { get; set; }
+        public double To { get; set; }
+        
+        public Range(double From, double to)
         {
-            this.from = from;
-            this.to = to;
-        }
-
-        public double To
-        {
-            get
-            {
-                return to;
-            }
-            set
-            {
-                to = value;
-            }
-        }
-
-        public double From
-        {
-            get
-            {
-                return from;
-            }
-            set
-            {
-                from = value;
-            }
+            this.From = From;
+            this.To = to;
         }
 
         public double Length
         {
             get
             {
-                return this.to - this.from;
+                return this.To - this.From;
             }
         }
 
         public bool IsInside(double number)
         {
-            return number <= this.to && number >= this.from;
+            return number <= this.To && number >= this.From;
         }
 
-        public static Range GetIntersection(Range range1, Range range2)
+        public Range GetIntersection(Range range)
         {
-            if (Math.Max(range1.From, range2.From) < Math.Min(range1.To, range2.To))
+            if (Math.Max(this.From, range.From) < Math.Min(this.To, range.To))
             {
-                return new Range(Math.Max(range1.From, range2.From), Math.Min(range1.To, range2.To));
+                return new Range(Math.Max(this.From, range.From), Math.Min(this.To, range.To));
             }
             else
             {
@@ -66,72 +42,42 @@ namespace Ranges
             }
         }
 
-        public static Range[] GetUnion(Range range1, Range range2)
+        public Range[] GetUnion(Range range)
         {
-            if (Math.Max(range1.From, range2.From) > Math.Min(range1.To, range2.To))
+            if (Math.Max(this.From, range.From) > Math.Min(this.To, range.To))
             {
-                return new Range[] { new Range(range1.From, range1.To), new Range(range2.From, range2.To) };
+                return new Range[] { new Range(this.From, this.To), new Range(range.From, range.To) };
             }
             else
             {
-                return new Range[] { new Range(Math.Min(range1.From, range2.From), Math.Max(range1.To, range2.To)) };
+                return new Range[] { new Range(Math.Min(this.From, range.From), Math.Max(this.To, range.To)) };
             }
         }
 
-        public static Range[] GetDifference(Range range1, Range range2)
+        public Range[] GetDifference(Range range)
         {
-            if (range1.From == range2.From && range1.To == range2.To)
+            if (this.From == range.From && this.To == range.To)
             {
                 return null;
             }
-            if (range2.From > range1.From && range2.To < range1.To)
+            if (range.From > this.From && range.To < this.To)
             {
-                return new Range[] { new Range(range1.From, range2.From), new Range(range2.To, range1.To) };
+                return new Range[] { new Range(this.From, range.From), new Range(range.To, this.To) };
             }
-            if (range2.To < range1.To)
+            if (this.To <= range.From || this.From >= range.To)
             {
-                return new Range[] { new Range(range2.To, range1.To) };
+                return new Range[] { new Range(this.From, this.To) };
             }
-            if (range2.From < range1.To)
+            if (range.To < this.To)
             {
-                return new Range[] { new Range(range1.From, range2.From) };
+                return new Range[] { new Range(range.To, this.To) };
             }
-
-            return null;
-        }
-
-        static void Main(string[] args)
-        {
-            Range range1 = new Range(1, 2);
-            Range range2 = new Range(1, 1.5);
-
-            Console.WriteLine("Длина интервала равна {0}.", range1.Length);
+            if (range.From < this.To)
+            {
+                return new Range[] { new Range(this.From, range.From) };
+            }
             
-            Range rangeResult = Range.GetIntersection(range1, range2);
-            
-            Range[] arrayResult = Range.GetDifference(range1, range2);
-
-            if (arrayResult != null)
-            {
-                foreach (Range range in arrayResult)
-                {
-                    Console.WriteLine(range.From + ", " + range.To);
-                }
-            }
-            else
-            {
-                Console.WriteLine(0);
-            }
-
-            double number = 10.0;
-            if (range1.IsInside(number))
-            {
-                Console.WriteLine("Число {0} внутри диапазона от {1} до {2}.", number, range1.From, range1.To);
-            }
-            else
-            {
-                Console.WriteLine("Число {0} не принадлежит диапазону от {1} до {2}.", number, range1.From, range1.To);
-            }
+            return new Range[0];
         }
     }
 }

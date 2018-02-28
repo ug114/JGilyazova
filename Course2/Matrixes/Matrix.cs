@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Vectors;
+using Vector;
 
-namespace Matrixes
+namespace Matrix
 {
     class Matrix
     {
-        private Vector[] array;
+        private Vector.Vector[] array;
 
         public Matrix(int m, int n)
         {
-            this.array = new Vector[n];
+            this.array = new Vector.Vector[n];
 
             for (int i = 0; i < n; i++)
             {
-                this.array[i] = new Vector(m);
+                this.array[i] = new Vector.Vector(m);
             }
         }
 
@@ -25,11 +25,11 @@ namespace Matrixes
         {
             int n = matrix.array.Length;
             int m = matrix.array[0].getSize();
-            this.array = new Vector[n];
+            this.array = new Vector.Vector[n];
 
             for (int i = 0; i < n; i++)
             {
-                this.array[i] = new Vector(m);
+                this.array[i] = new Vector.Vector(m);
 
                 for (int j = 0; j < m; j++)
                 {
@@ -42,11 +42,11 @@ namespace Matrixes
         {
             int n = array.GetLength(0);
             int m = array.GetLength(1);
-            this.array = new Vector[n];
+            this.array = new Vector.Vector[n];
 
             for (int i = 0; i < n; i++)
             {
-                this.array[i] = new Vector(m);
+                this.array[i] = new Vector.Vector(m);
                 for (int j = 0; j < m; j++)
                 {
                     this.array[i].SetComponent(j, array[i, j]);
@@ -54,15 +54,15 @@ namespace Matrixes
             }
         }
 
-        public Matrix(Vector[] array)
+        public Matrix(Vector.Vector[] array)
         {
             int n = array.Length;
             int m = array[0].getSize();
-            this.array = new Vector[n];
+            this.array = new Vector.Vector[n];
 
             for (int i = 0; i < n; i++)
             {
-                this.array[i] = new Vector(m);
+                this.array[i] = new Vector.Vector(m);
                 for (int j = 0; j < m; j++)
                 {
                     this.array[i].SetComponent(j, array[i].GetComponent(j));
@@ -78,12 +78,12 @@ namespace Matrixes
             return sizes;
         }
 
-        public Vector GetString(int numberOfString)
+        public Vector.Vector GetString(int numberOfString)
         {
             return this.array[numberOfString];
         }
 
-        public void SetString(int numberOfString, Vector inputVector)
+        public void SetString(int numberOfString, Vector.Vector inputVector)
         {
             for (int i = 0; i < inputVector.getSize(); i++)
             {
@@ -91,9 +91,9 @@ namespace Matrixes
             }
         }
 
-        public Vector GetColumn(int numberOfColumn)
+        public Vector.Vector GetColumn(int numberOfColumn)
         {
-            Vector column = new Vector(this.GetSizeOfMatrix()[1]);
+            Vector.Vector column = new Vector.Vector(this.GetSizeOfMatrix()[1]);
             int n = this.GetSizeOfMatrix()[0];
             for (int i = 0; i < n; i++)
             {
@@ -168,12 +168,12 @@ namespace Matrixes
             return outputString;
         }
 
-        public Vector MultipleVector(Vector vector)
+        public Vector.Vector MultipleVector(Vector.Vector vector)
         {
             int n = this.GetSizeOfMatrix()[0];
             int m = this.GetSizeOfMatrix()[1];
             double sum = 0;
-            Vector outputVector = new Vector(n);
+            Vector.Vector outputVector = new Vector.Vector(n);
 
             for (int i = 0; i < n; i++)
             {
@@ -331,33 +331,6 @@ namespace Matrixes
                 }
             }
             return outputMatrix;
-        }
-
-        static void Main(string[] args)
-        {
-            Matrix matrix1 = new Matrix(2, 2);
-            Matrix matrix2 = new Matrix(matrix1);
-            double[,] array = { { 1, 2 }, { 3, 4 } };
-            Matrix matrix3 = new Matrix(array);
-            double[] array1 = { 1, 2, 3 };
-            Vector v1 = new Vector(array1);
-            double[] array2 = { 2, 4, 6 };
-            Vector v2 = new Vector(array2);
-            Matrix matrix4 = new Matrix(new Vector[] { v1, v2 });
-            matrix4.Multiple(2);
-            Console.WriteLine(matrix3.toString());
-            Console.WriteLine(matrix4.toString());
-            Console.WriteLine(Multiplicate(matrix3, matrix4).toString());
-            Console.WriteLine(matrix3.GetDeterminant());
-            //for (int i = 0; i < 2; i++)
-            //{
-            //    for (int j = 0; j < 3; j++)
-            //    {
-            //        Console.Write(" {0}", matrix4.array[i].GetComponent(j));
-            //    }
-            //    Console.WriteLine();
-            //}
-            //Console.WriteLine(matrix4.MultipleVector(v1).toString());
         }
     }
 }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Shapes
 {
-    class Shapes
+    public class Shapes
     {
-        interface Shape
+        public interface Shape
         {
             double getWidth();
             double getHeight();
@@ -16,7 +16,7 @@ namespace Shapes
             double getPerimeter();
         }
 
-        class Square : Shape, IComparable
+        public class Square : Shape, IComparable
         {
             private double lengthOfSide;
 
@@ -77,7 +77,7 @@ namespace Shapes
             }
         }
 
-        class Triangle : Shape, IComparable
+        public class Triangle : Shape, IComparable
         {
             private double x1, x2, x3, y1, y2, y3;
 
@@ -159,7 +159,7 @@ namespace Shapes
             }
         }
 
-        class Rectangle : Shape, IComparable
+        public class Rectangle : Shape, IComparable
         {
             private double lengthOfFirstSide;
             private double lengthOfSecondSide;
@@ -222,7 +222,7 @@ namespace Shapes
             }
         }
 
-        class Circle : Shape, IComparable
+        public class Circle : Shape, IComparable
         {
             private double radius;
 
@@ -281,25 +281,6 @@ namespace Shapes
             {
                 return (int)radius;
             }
-        }
-
-        static void Main(string[] args)
-        {
-            Square firstSquare = new Square(4);
-            Square secondSquare = new Square(3);
-
-            Triangle firstTriangle = new Triangle(1, 2, 7, 2, 5, 7);
-            Triangle secondTriangle = new Triangle(0, 0, 4, 2, 5, 7);
-
-            Rectangle firstRectangle = new Rectangle(3, 5);
-            Rectangle secondRectangle = new Rectangle(1, 2);
-
-            Circle firstCircle = new Circle(2);
-            Circle secondCircle = new Circle(8);
-
-            Console.WriteLine(firstRectangle.getArea());
-
-            Shape[] array = { firstSquare, secondSquare, firstTriangle, secondTriangle, firstRectangle, secondRectangle, firstCircle, secondCircle };
         }
     }
 }
