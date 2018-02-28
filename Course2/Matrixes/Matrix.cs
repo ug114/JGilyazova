@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Vector;
+using vector = Vector.Vector;
 
 namespace Matrix
 {
     class Matrix
     {
-        private Vector.Vector[] array;
+        private vector[] array;
 
         public Matrix(int m, int n)
         {
-            this.array = new Vector.Vector[n];
+            this.array = new vector[n];
 
             for (int i = 0; i < n; i++)
             {
-                this.array[i] = new Vector.Vector(m);
+                this.array[i] = new vector(m);
             }
         }
 
@@ -25,11 +25,11 @@ namespace Matrix
         {
             int n = matrix.array.Length;
             int m = matrix.array[0].getSize();
-            this.array = new Vector.Vector[n];
+            this.array = new vector[n];
 
             for (int i = 0; i < n; i++)
             {
-                this.array[i] = new Vector.Vector(m);
+                this.array[i] = new vector(m);
 
                 for (int j = 0; j < m; j++)
                 {
@@ -42,11 +42,11 @@ namespace Matrix
         {
             int n = array.GetLength(0);
             int m = array.GetLength(1);
-            this.array = new Vector.Vector[n];
+            this.array = new vector[n];
 
             for (int i = 0; i < n; i++)
             {
-                this.array[i] = new Vector.Vector(m);
+                this.array[i] = new vector(m);
                 for (int j = 0; j < m; j++)
                 {
                     this.array[i].SetComponent(j, array[i, j]);
@@ -54,15 +54,15 @@ namespace Matrix
             }
         }
 
-        public Matrix(Vector.Vector[] array)
+        public Matrix(vector[] array)
         {
             int n = array.Length;
             int m = array[0].getSize();
-            this.array = new Vector.Vector[n];
+            this.array = new vector[n];
 
             for (int i = 0; i < n; i++)
             {
-                this.array[i] = new Vector.Vector(m);
+                this.array[i] = new vector(m);
                 for (int j = 0; j < m; j++)
                 {
                     this.array[i].SetComponent(j, array[i].GetComponent(j));
@@ -78,12 +78,12 @@ namespace Matrix
             return sizes;
         }
 
-        public Vector.Vector GetString(int numberOfString)
+        public vector GetString(int numberOfString)
         {
             return this.array[numberOfString];
         }
 
-        public void SetString(int numberOfString, Vector.Vector inputVector)
+        public void SetString(int numberOfString, vector inputVector)
         {
             for (int i = 0; i < inputVector.getSize(); i++)
             {
@@ -91,9 +91,9 @@ namespace Matrix
             }
         }
 
-        public Vector.Vector GetColumn(int numberOfColumn)
+        public vector GetColumn(int numberOfColumn)
         {
-            Vector.Vector column = new Vector.Vector(this.GetSizeOfMatrix()[1]);
+            Vector.Vector column = new vector(this.GetSizeOfMatrix()[1]);
             int n = this.GetSizeOfMatrix()[0];
             for (int i = 0; i < n; i++)
             {
@@ -168,12 +168,12 @@ namespace Matrix
             return outputString;
         }
 
-        public Vector.Vector MultipleVector(Vector.Vector vector)
+        public vector MultipleVector(vector vector)
         {
             int n = this.GetSizeOfMatrix()[0];
             int m = this.GetSizeOfMatrix()[1];
             double sum = 0;
-            Vector.Vector outputVector = new Vector.Vector(n);
+            vector outputVector = new vector(n);
 
             for (int i = 0; i < n; i++)
             {

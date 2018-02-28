@@ -3,29 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Shapes;
+using square = Shape.Square;
+using triangle = Shape.Triangle;
+using rectangle = Shape.Rectangle;
+using circle = Shape.Circle;
+using shape = Shape.Shape;
 
-namespace Shapes
+namespace Shape
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Shapes.Square firstSquare = new Shapes.Square(4);
-            Shapes.Square secondSquare = new Shapes.Square(3);
+            square firstSquare = new square(4);
+            square secondSquare = new square(3);
 
-            Shapes.Triangle firstTriangle = new Shapes.Triangle(1, 2, 7, 2, 5, 7);
-            Shapes.Triangle secondTriangle = new Shapes.Triangle(0, 0, 4, 2, 5, 7);
+            triangle firstTriangle = new triangle(1, 2, 7, 2, 5, 7);
+            triangle secondTriangle = new triangle(0, 0, 4, 2, 5, 7);
 
-            Shapes.Rectangle firstRectangle = new Shapes.Rectangle(3, 5);
-            Shapes.Rectangle secondRectangle = new Shapes.Rectangle(1, 2);
+            rectangle firstRectangle = new rectangle(3, 5);
+            rectangle secondRectangle = new rectangle(1, 2);
 
-            Shapes.Circle firstCircle = new Shapes.Circle(2);
-            Shapes.Circle secondCircle = new Shapes.Circle(8);
+            circle firstCircle = new circle(2);
+            circle secondCircle = new circle(8);
 
             Console.WriteLine(firstRectangle.getArea());
 
-            Shapes.Shape[] array = { firstSquare, secondSquare, firstTriangle, secondTriangle, firstRectangle, secondRectangle, firstCircle, secondCircle };
+            shape[] array = { firstSquare, secondSquare, firstTriangle, secondTriangle, firstRectangle, secondRectangle, firstCircle, secondCircle };
         }
     }
 }
