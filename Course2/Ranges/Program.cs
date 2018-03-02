@@ -10,38 +10,45 @@ namespace Range
     {
         static void Main(string[] args)
         {
-            Range range1 = new Range(1, 2);
-            Range range2 = new Range(1.5, 2);
+            Range range1 = new Range(1, 4);
+            Range range2 = new Range(5, 6);
 
-            //Console.WriteLine("Длина интервала равна {0}.", range1.Length);
+            Console.WriteLine("Длина интервала ({0}, {1}) равна {2}.", range1.From, range1.To, range1.Length);
 
-            //Range rangeResult = range1.GetIntersection(range2);
+            Range rangeResult = range1.GetIntersection(range2);
 
             Range[] arrayResult = range1.GetDifference(range2);
 
-            //if (rangeResult != null)
-            //{
-            //    Console.WriteLine(rangeResult.From + ", " + rangeResult.To);
-            //}
-            //else
-            //{
-            //    Console.WriteLine(0);
-            //}
+            if (rangeResult != null)
+            {
+                Console.WriteLine("Пересечение интервалов ({0}, {1}) и ({2}, {3}): ({4}, {5}).", range1.From, range1.To, range2.From, range2.To, rangeResult.From, rangeResult.To);
+            }
+            else
+            {
+                Console.WriteLine(0);
+            }
 
             foreach (Range range in arrayResult)
             {
-                Console.WriteLine(range.From + ", " + range.To);
+                Console.WriteLine("Разность интервалов ({0}, {1}) и ({2}, {3}): ({4}, {5}).", range1.From, range1.To, range2.From, range2.To, range.From, range.To);
             }
 
-            //double number = 10.0;
-            //if (range1.IsInside(number))
-            //{
-            //    Console.WriteLine("Число {0} внутри диапазона от {1} до {2}.", number, range1.From, range1.To);
-            //}
-            //else
-            //{
-            //    Console.WriteLine("Число {0} не принадлежит диапазону от {1} до {2}.", number, range1.From, range1.To);
-            //}
+            arrayResult = range1.GetUnion(range2);
+
+            foreach (Range range in arrayResult)
+            {
+                Console.WriteLine("Объединение интервалов ({0}, {1}) и ({2}, {3}): ({4}, {5}).", range1.From, range1.To, range2.From, range2.To, range.From, range.To);
+            }
+
+            double number = 10.0;
+            if (range1.IsInside(number))
+            {
+                Console.WriteLine("Число {0} принадлежит интервалу от {1} до {2}.", number, range1.From, range1.To);
+            }
+            else
+            {
+                Console.WriteLine("Число {0} не принадлежит интервалу от {1} до {2}.", number, range1.From, range1.To);
+            }
         }
     }
 }

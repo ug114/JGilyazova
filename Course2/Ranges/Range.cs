@@ -58,7 +58,7 @@ namespace Range
         {
             if (this.From == range.From && this.To == range.To)
             {
-                return null;
+                return new Range[0];
             }
             if (range.From > this.From && range.To < this.To)
             {
@@ -72,11 +72,11 @@ namespace Range
             {
                 return new Range[] { new Range(range.To, this.To) };
             }
-            if (range.From < this.To)
+            if (range.From < this.To && range.From > this.From)
             {
                 return new Range[] { new Range(this.From, range.From) };
             }
-            
+
             return new Range[0];
         }
     }

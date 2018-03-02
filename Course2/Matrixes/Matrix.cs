@@ -93,7 +93,7 @@ namespace Matrix
 
         public vector GetColumn(int numberOfColumn)
         {
-            Vector.Vector column = new vector(this.GetSizeOfMatrix()[1]);
+            vector column = new vector(this.GetSizeOfMatrix()[1]);
             int n = this.GetSizeOfMatrix()[0];
             for (int i = 0; i < n; i++)
             {
