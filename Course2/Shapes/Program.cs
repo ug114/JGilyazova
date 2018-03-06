@@ -27,7 +27,7 @@ namespace Shape
             circle firstCircle = new circle(2);
             circle secondCircle = new circle(8);
 
-            Console.WriteLine(firstRectangle.getArea());
+            Console.WriteLine(firstRectangle.GetArea());
 
             shape[] array = { firstSquare, secondSquare, firstTriangle, secondTriangle, firstRectangle, secondRectangle, firstCircle, secondCircle };
         }

@@ -11,7 +11,7 @@ namespace Range
         static void Main(string[] args)
         {
             Range range1 = new Range(1, 4);
-            Range range2 = new Range(5, 6);
+            Range range2 = new Range(3, 6);
 
             Console.WriteLine("Длина интервала ({0}, {1}) равна {2}.", range1.From, range1.To, range1.Length);
 
@@ -41,6 +41,7 @@ namespace Range
             }
 
             double number = 10.0;
+
             if (range1.IsInside(number))
             {
                 Console.WriteLine("Число {0} принадлежит интервалу от {1} до {2}.", number, range1.From, range1.To);

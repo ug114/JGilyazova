@@ -20,17 +20,17 @@ namespace Shape
             this.y3 = y3;
         }
 
-        public double getWidth()
+        public double GetWidth()
         {
             return Math.Max(Math.Max(x1, x2), x3) - Math.Min(Math.Min(x1, x2), x3);
         }
 
-        public double getHeight()
+        public double GetHeight()
         {
             return Math.Max(Math.Max(y1, y2), y3) - Math.Min(Math.Min(y1, y2), y3);
         }
 
-        public double getArea()
+        public double GetArea()
         {
             double eps = 1e-10;
 
@@ -48,7 +48,7 @@ namespace Shape
             }
         }
 
-        public double getPerimeter()
+        public double GetPerimeter()
         {
             double a = Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2));
             double b = Math.Sqrt(Math.Pow(x3 - x1, 2) + Math.Pow(y3 - y1, 2));
@@ -79,12 +79,22 @@ namespace Shape
                 return false;
             }
 
-            return triangle.x1 == this.x1 && triangle.x2 == this.x2 && triangle.x3 == this.x3 && triangle.y1 == this.y1 && triangle.y2 == this.y2 && triangle.y3 == this.y3;
+            return triangle.x1 == x1 && triangle.x2 == x2 && triangle.x3 == x3 && triangle.y1 == y1 && triangle.y2 == y2 && triangle.y3 == y3;
         }
 
         public override int GetHashCode()
         {
-            return (int)(x1 * x2 * x3 * y1 * y2 * y3);
+            int prime = 7;
+            int hash = 1;
+
+            hash = prime * hash + (int)x1;
+            hash = prime * hash + (int)x2;
+            hash = prime * hash + (int)x3;
+            hash = prime * hash + (int)y1;
+            hash = prime * hash + (int)y2;
+            hash = prime * hash + (int)y3;
+
+            return hash;
         }
     }
 }

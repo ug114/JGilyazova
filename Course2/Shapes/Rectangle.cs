@@ -8,38 +8,38 @@ namespace Shape
 {
     public class Rectangle : Shape, IComparable
     {
-        private double lengthOfFirstSide;
-        private double lengthOfSecondSide;
+        private double height;
+        private double width;
 
-        public Rectangle(double lengthOfFirstSide, double lengthOfSecondSide)
+        public Rectangle(double height, double width)
         {
-            this.lengthOfFirstSide = lengthOfFirstSide;
-            this.lengthOfSecondSide = lengthOfSecondSide;
+            this.height = height;
+            this.width = width;
         }
 
-        public double getWidth()
+        public double GetWidth()
         {
-            return Math.Max(this.lengthOfFirstSide, this.lengthOfSecondSide);
+            return Math.Max(height, width);
         }
 
-        public double getHeight()
+        public double GetHeight()
         {
-            return Math.Min(this.lengthOfFirstSide, this.lengthOfSecondSide);
+            return Math.Min(height, width);
         }
 
-        public double getArea()
+        public double GetArea()
         {
-            return this.lengthOfFirstSide * this.lengthOfSecondSide;
+            return height * width;
         }
 
-        public double getPerimeter()
+        public double GetPerimeter()
         {
-            return 2 * (this.lengthOfFirstSide + this.lengthOfSecondSide);
+            return 2 * (height + width);
         }
 
         public override string ToString()
         {
-            return lengthOfFirstSide + ", " + lengthOfSecondSide;
+            return height + ", " + width;
         }
 
         public int CompareTo(Object obj)
@@ -60,12 +60,18 @@ namespace Shape
                 return false;
             }
 
-            return rectangle.lengthOfFirstSide == this.lengthOfFirstSide && rectangle.lengthOfSecondSide == this.lengthOfSecondSide;
+            return rectangle.height == height && rectangle.width == width;
         }
 
         public override int GetHashCode()
         {
-            return (int)(lengthOfFirstSide * lengthOfSecondSide);
+            int prime = 17;
+            int hash = 1;
+
+            hash = prime * hash + (int)height;
+            hash = prime * hash + (int)width;
+
+            return hash;
         }
     }
 }

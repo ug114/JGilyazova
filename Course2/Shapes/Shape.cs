@@ -8,9 +8,9 @@ namespace Shape
 {
     public interface Shape
     {
-        double getWidth();
-        double getHeight();
-        double getArea();
-        double getPerimeter();
+        double GetWidth();
+        double GetHeight();
+        double GetArea();
+        double GetPerimeter();
     }
 }

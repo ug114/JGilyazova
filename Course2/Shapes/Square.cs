@@ -15,24 +15,24 @@ namespace Shape
             this.lengthOfSide = lengthOfSide;
         }
 
-        public double getWidth()
+        public double GetWidth()
         {
-            return this.lengthOfSide;
+            return lengthOfSide;
         }
 
-        public double getHeight()
+        public double GetHeight()
         {
-            return this.lengthOfSide;
+            return lengthOfSide;
         }
 
-        public double getArea()
+        public double GetArea()
         {
-            return this.lengthOfSide * this.lengthOfSide;
+            return lengthOfSide * lengthOfSide;
         }
 
-        public double getPerimeter()
+        public double GetPerimeter()
         {
-            return this.lengthOfSide * 4;
+            return lengthOfSide * 4;
         }
 
         public override string ToString()
@@ -58,12 +58,17 @@ namespace Shape
                 return false;
             }
 
-            return square.lengthOfSide == this.lengthOfSide;
+            return square.lengthOfSide == lengthOfSide;
         }
 
         public override int GetHashCode()
         {
-            return (int)lengthOfSide;
+            int prime = 19;
+            int hash = 1;
+
+            hash = prime * hash + (int)lengthOfSide;
+
+            return hash;
         }
     }
 }

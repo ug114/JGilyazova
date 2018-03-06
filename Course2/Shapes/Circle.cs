@@ -15,22 +15,22 @@ namespace Shape
             this.radius = radius;
         }
 
-        public double getWidth()
+        public double GetWidth()
         {
             return this.radius * 2;
         }
 
-        public double getHeight()
+        public double GetHeight()
         {
             return this.radius * 2;
         }
 
-        public double getArea()
+        public double GetArea()
         {
             return Math.PI * Math.Pow(radius, 2);
         }
 
-        public double getPerimeter()
+        public double GetPerimeter()
         {
             return 2 * Math.PI * radius;
         }
@@ -63,7 +63,12 @@ namespace Shape
 
         public override int GetHashCode()
         {
-            return (int)radius;
+            int prime = 13;
+            int hash = 1;
+
+            hash = prime * hash + (int)radius;
+
+            return hash;
         }
     }
 }
