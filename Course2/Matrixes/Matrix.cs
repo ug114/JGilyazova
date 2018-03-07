@@ -24,7 +24,7 @@ namespace Matrix
         public Matrix(Matrix matrix)
         {
             int n = matrix.array.Length;
-            int m = matrix.array[0].getSize();
+            int m = matrix.array[0].GetSize();
             this.array = new vector[n];
 
             for (int i = 0; i < n; i++)
@@ -57,7 +57,7 @@ namespace Matrix
         public Matrix(vector[] array)
         {
             int n = array.Length;
-            int m = array[0].getSize();
+            int m = array[0].GetSize();
             this.array = new vector[n];
 
             for (int i = 0; i < n; i++)
@@ -74,7 +74,7 @@ namespace Matrix
         {
             int[] sizes = new int[2];
             sizes[0] = this.array.Length;
-            sizes[1] = this.array[0].getSize();
+            sizes[1] = this.array[0].GetSize();
             return sizes;
         }
 
@@ -85,7 +85,7 @@ namespace Matrix
 
         public void SetString(int numberOfString, vector inputVector)
         {
-            for (int i = 0; i < inputVector.getSize(); i++)
+            for (int i = 0; i < inputVector.GetSize(); i++)
             {
                 this.array[numberOfString].SetComponent(i, inputVector.GetComponent(i));
             }

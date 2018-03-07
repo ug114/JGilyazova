@@ -21,142 +21,128 @@ namespace Vector
             }
             catch (ArgumentException)
             {
-                Console.WriteLine("Exception");
+                Console.WriteLine("Размерность вектора должна быть > 0.");
             }
-            this.components = new double[n];
+
+            components = new double[n];
+
             for (int i = 0; i < n; i++)
             {
-                this.components[i] = 0;
+                components[i] = 0;
             }
         }
 
         public Vector(Vector vector)
         {
-            for (int i = 0; i < vector.getSize(); i++)
+            for (int i = 0; i < vector.GetSize(); i++)
             {
-                this.components[i] = vector.components[i];
+                components[i] = vector.components[i];
             }
         }
 
         public Vector(double[] array)
         {
-            this.components = new double[array.Length];
+            components = new double[array.Length];
+
             for (int i = 0; i < array.Length; i++)
             {
-                this.components[i] = array[i];
+                components[i] = array[i];
             }
         }
 
         public Vector(int n, double[] array)
         {
-            this.components = new double[n];
-            if (array.Length == n)
-            {
-                for (int i = 0; i < n; i++)
-                {
-                    this.components[i] = array[i];
-                }
-            }
-            else
-            {
-                for (int i = 0; i < array.Length; i++)
-                {
-                    this.components[i] = array[i];
-                }
+            components = new double[n];
 
-                for (int i = 0; i < n; i++)
+            for (int i = 0; i < n; i++)
+            {
+                if (i >= array.Length)
                 {
-                    this.components[i] = 0;
+                    components[i] = 0;
+                }
+                else
+                {
+                    components[i] = array[i];
                 }
             }
         }
 
-        public int getSize()
+        public int GetSize()
         {
-            return this.components.Length;
+            return components.Length;
         }
 
-        public string toString()
+        public override string ToString()
         {
-            string outputString = "{" + this.components[0].ToString();
+            StringBuilder builder = new StringBuilder("{ " + components[0].ToString());
 
-            for (int i = 1; i < this.getSize(); i++)
+            for (int i = 1; i < this.GetSize(); i++)
             {
-                outputString = outputString + ", " + this.components[i];
+                builder.Append(", " + components[i]);
             }
 
-            return outputString + "}";
+            return builder.Append(" }").ToString();
         }
 
         public Vector GetSum(Vector vector2)
         {
-            if (vector2.getSize() < this.getSize())
+            for (int i = 0; i < GetSize(); i++)
             {
-                for (int i = 0; i < vector2.getSize(); i++)
+                if (i < vector2.GetSize())
                 {
-                    this.components[i] += vector2.components[i];
+                    components[i] += vector2.components[i];
                 }
             }
-            else
-            {
-                for (int i = 0; i < this.getSize(); i++)
-                {
-                    this.components[i] += vector2.components[i];
-                }
-            }
+
             return this;
         }
 
         public Vector GetDifference(Vector vector2)
         {
-            if (vector2.getSize() < this.getSize())
+            for (int i = 0; i < GetSize(); i++)
             {
-                for (int i = 0; i < vector2.getSize(); i++)
+                if (i < vector2.GetSize())
                 {
-                    this.components[i] += vector2.components[i];
+                    components[i] -= vector2.components[i];
                 }
             }
-            else
-            {
-                for (int i = 0; i < this.getSize(); i++)
-                {
-                    this.components[i] -= vector2.components[i];
-                }
-            }
+
             return this;
         }
 
         public Vector MultiplyByScalar(double scalar)
         {
-            for (int i = 0; i < this.getSize(); i++)
+            for (int i = 0; i < GetSize(); i++)
             {
-                this.components[i] *= scalar;
+                components[i] *= scalar;
             }
+
             return this;
         }
 
         public Vector Reverse()
         {
-            for (int i = 0; i < this.getSize(); i++)
+            for (int i = 0; i < GetSize(); i++)
             {
-                this.components[i] *= -1;
+                components[i] *= -1;
             }
+
             return this;
         }
 
         public double GetComponent(int index)
         {
-            return this.components[index];
+            return components[index];
         }
 
         public void SetComponent(int index, double newComponent)
         {
-            this.components[index] = newComponent;
+            components[index] = newComponent;
         }
 
         public static Vector GetSum(Vector vector1, Vector vector2)
         {
-            if (vector1.getSize() < vector2.getSize())
+            if (vector1.GetSize() < vector2.GetSize())
             {
                 return vector2.GetSum(vector1);
             }
@@ -168,7 +154,7 @@ namespace Vector
 
         public static Vector GetDifference(Vector vector1, Vector vector2)
         {
-            if (vector1.getSize() < vector2.getSize())
+            if (vector1.GetSize() < vector2.GetSize())
             {
                 return vector2.GetDifference(vector1);
             }
@@ -182,7 +168,7 @@ namespace Vector
         {
             double sum = 0;
 
-            for (int i = 0; i < Math.Min(vector1.getSize(), vector2.getSize()); i++)
+            for (int i = 0; i < Math.Min(vector1.GetSize(), vector2.GetSize()); i++)
             {
                 sum += vector1.components[i] * vector2.components[i];
             }
@@ -198,20 +184,23 @@ namespace Vector
             }
 
             Vector vector = obj as Vector;
+
             if (vector as Vector == null)
             {
                 return false;
             }
 
-            if (vector.getSize() != this.getSize())
+            if (vector.GetSize() != GetSize())
             {
                 return false;
             }
             else
             {
-                for (int i = 0; i < this.getSize(); i++)
+                double eps = 1e-5;
+
+                for (int i = 0; i < GetSize(); i++)
                 {
-                    if (vector.GetComponent(i) != this.GetComponent(i))
+                    if ((vector.GetComponent(i) - GetComponent(i)) > eps)
                     {
                         return false;
                     }
@@ -223,7 +212,15 @@ namespace Vector
 
         public override int GetHashCode()
         {
-            return 2;
+            int prime = 13;
+            int hash = 1;
+
+            for (int i = 0; i < GetSize(); i++)
+            {
+                hash = prime * hash + (int)components[i];
+            }
+
+            return hash;
         }
     }
 }
