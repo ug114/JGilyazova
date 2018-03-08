@@ -13,11 +13,11 @@ namespace Matrix
 
         public Matrix(int m, int n)
         {
-            this.array = new vector[n];
+            array = new vector[n];
 
             for (int i = 0; i < n; i++)
             {
-                this.array[i] = new vector(m);
+                array[i] = new vector(m);
             }
         }
 
@@ -25,15 +25,15 @@ namespace Matrix
         {
             int n = matrix.array.Length;
             int m = matrix.array[0].GetSize();
-            this.array = new vector[n];
+            array = new vector[n];
 
             for (int i = 0; i < n; i++)
             {
-                this.array[i] = new vector(m);
+                array[i] = new vector(m);
 
                 for (int j = 0; j < m; j++)
                 {
-                    this.array[i].SetComponent(j, matrix.array[i].GetComponent(j));
+                    array[i].SetComponent(j, matrix.array[i].GetComponent(j));
                 }
             }
         }
@@ -70,34 +70,36 @@ namespace Matrix
             }
         }
 
-        public int[] GetSizeOfMatrix()
+        public int GetNumberOfRows()
         {
-            int[] sizes = new int[2];
-            sizes[0] = this.array.Length;
-            sizes[1] = this.array[0].GetSize();
-            return sizes;
+            return array.GetLength(0);
+        }
+
+        public int GetNumberOfColumns()
+        {
+            return array[0].GetSize();
         }
 
         public vector GetString(int numberOfString)
         {
-            return this.array[numberOfString];
+            return array[numberOfString];
         }
 
         public void SetString(int numberOfString, vector inputVector)
         {
             for (int i = 0; i < inputVector.GetSize(); i++)
             {
-                this.array[numberOfString].SetComponent(i, inputVector.GetComponent(i));
+                array[numberOfString].SetComponent(i, inputVector.GetComponent(i));
             }
         }
 
         public vector GetColumn(int numberOfColumn)
         {
-            vector column = new vector(this.GetSizeOfMatrix()[1]);
-            int n = this.GetSizeOfMatrix()[0];
+            vector column = new vector(GetNumberOfColumns());
+            int n = GetNumberOfRows();
             for (int i = 0; i < n; i++)
             {
-                column.SetComponent(i, this.array[numberOfColumn].GetComponent(i));
+                column.SetComponent(i, array[numberOfColumn].GetComponent(i));
             }
             return column;
         }
@@ -105,8 +107,8 @@ namespace Matrix
         public void Transpose()
         {
             double temp;
-            int n = this.GetSizeOfMatrix()[0];
-            int m = this.GetSizeOfMatrix()[1];
+            int n = GetNumberOfRows();
+            int m = GetNumberOfColumns();
 
             for (int i = 0; i < n; i++)
             {
@@ -114,9 +116,9 @@ namespace Matrix
                 {
                     if (j > i)
                     {
-                        temp = this.array[i].GetComponent(j);
-                        this.array[i].SetComponent(j, this.array[j].GetComponent(i));
-                        this.array[j].SetComponent(i, temp);
+                        temp = array[i].GetComponent(j);
+                        array[i].SetComponent(j, array[j].GetComponent(i));
+                        array[j].SetComponent(i, temp);
                     }
                 }
             }
@@ -124,54 +126,58 @@ namespace Matrix
 
         public void Multiple(double scalar)
         {
-            int n = this.GetSizeOfMatrix()[0];
-            int m = this.GetSizeOfMatrix()[1];
+            int n = GetNumberOfRows();
+            int m = GetNumberOfColumns();
+
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < m; j++)
                 {
-                    this.array[i].SetComponent(j, this.array[i].GetComponent(j) * scalar);
+                    array[i].SetComponent(j, array[i].GetComponent(j) * scalar);
                 }
             }
         }
 
-        public string toString()
+        public override string ToString()
         {
-            string outputString = "{";
-            int n = this.GetSizeOfMatrix()[0];
-            int m = this.GetSizeOfMatrix()[1];
+            StringBuilder builder = new StringBuilder("{ ");
+            int n = GetNumberOfRows();
+            int m = GetNumberOfColumns();
+
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < m; j++)
                 {
                     if (j == 0)
                     {
-                        outputString += "{";
+                        builder.Append("{");
                     }
-                    outputString += this.array[i].GetComponent(j);
+
+                    builder.Append(array[i].GetComponent(j));
+
                     if (j != m - 1)
                     {
-                        outputString += ", ";
+                        builder.Append(", ");
                     }
 
                     if (j == m - 1)
                     {
-                        outputString += "}";
+                        builder.Append("}");
                     }
                 }
                 if (i != n - 1)
                 {
-                    outputString += ", ";
+                    builder.Append(", ");
                 }
             }
-            outputString += "}";
-            return outputString;
+            
+            return builder.Append(" }").ToString();
         }
 
         public vector MultipleVector(vector vector)
         {
-            int n = this.GetSizeOfMatrix()[0];
-            int m = this.GetSizeOfMatrix()[1];
+            int n = GetNumberOfRows();
+            int m = GetNumberOfColumns();
             double sum = 0;
             vector outputVector = new vector(n);
 
@@ -179,45 +185,46 @@ namespace Matrix
             {
                 for (int j = 0; j < m; j++)
                 {
-                    sum += this.array[i].GetComponent(j) * vector.GetComponent(j);
+                    sum += array[i].GetComponent(j) * vector.GetComponent(j);
                 }
                 outputVector.SetComponent(i, sum);
                 sum = 0;
             }
+
             return outputVector;
         }
 
         public void Sum(Matrix inputMatrix)
         {
-            int n = this.GetSizeOfMatrix()[0];
-            int m = this.GetSizeOfMatrix()[1];
+            int n = GetNumberOfRows();
+            int m = GetNumberOfColumns();
 
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < m; j++)
                 {
-                    this.array[i].SetComponent(j, this.array[i].GetComponent(j) + inputMatrix.array[i].GetComponent(j));
+                   array[i].SetComponent(j, array[i].GetComponent(j) + inputMatrix.array[i].GetComponent(j));
                 }
             }
         }
 
         public void Difference(Matrix inputMatrix)
         {
-            int n = this.GetSizeOfMatrix()[0];
-            int m = this.GetSizeOfMatrix()[1];
+            int n = GetNumberOfRows();
+            int m = GetNumberOfColumns();
 
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < m; j++)
                 {
-                    this.array[i].SetComponent(j, this.array[i].GetComponent(j) - inputMatrix.array[i].GetComponent(j));
+                    array[i].SetComponent(j, array[i].GetComponent(j) - inputMatrix.array[i].GetComponent(j));
                 }
             }
         }
 
         public double GetDeterminant()
         {
-            int arrayLength = this.array.GetLength(0);
+            int arrayLength = array.GetLength(0);
             int tempIndex = 0;
             int numberOfChanges = 0;
             int numberOfStep = 0;
@@ -228,7 +235,7 @@ namespace Matrix
 
                 for (int i = numberOfStep; i < arrayLength; i++)
                 {
-                    if (this.array[i].GetComponent(numberOfStep) != 0)
+                    if (array[i].GetComponent(numberOfStep) != 0)
                     {
                         firstIsNull = false;
                         tempIndex = i;
@@ -246,9 +253,9 @@ namespace Matrix
                     {
                         for (int i = numberOfStep; i < arrayLength; i++)
                         {
-                            double temp = this.array[tempIndex].GetComponent(i);
-                            this.array[tempIndex].SetComponent(i, this.array[numberOfStep].GetComponent(i));
-                            this.array[numberOfStep].SetComponent(i, temp);
+                            double temp = array[tempIndex].GetComponent(i);
+                            array[tempIndex].SetComponent(i, array[numberOfStep].GetComponent(i));
+                            array[numberOfStep].SetComponent(i, temp);
                         }
 
                         numberOfChanges++;
@@ -256,11 +263,11 @@ namespace Matrix
 
                     for (int i = numberOfStep + 1; i < arrayLength; i++)
                     {
-                        double coefficient = this.array[i].GetComponent(numberOfStep) / this.array[numberOfStep].GetComponent(numberOfStep);
+                        double coefficient = array[i].GetComponent(numberOfStep) / array[numberOfStep].GetComponent(numberOfStep);
 
                         for (int j = numberOfStep; j < arrayLength; j++)
                         {
-                            this.array[i].SetComponent(j, this.array[i].GetComponent(j) - this.array[numberOfStep].GetComponent(j) * coefficient);
+                            array[i].SetComponent(j, array[i].GetComponent(j) - array[numberOfStep].GetComponent(j) * coefficient);
                         }
                     }
                 }
@@ -268,11 +275,11 @@ namespace Matrix
                 numberOfStep++;
             }
 
-            double det = this.array[0].GetComponent(0);
+            double det = array[0].GetComponent(0);
 
             for (int i = 1; i < arrayLength; i++)
             {
-                det *= this.array[i].GetComponent(i);
+                det *= array[i].GetComponent(i);
             }
 
             return det * Math.Pow(-1, numberOfChanges);
@@ -280,8 +287,8 @@ namespace Matrix
 
         public static Matrix Sum(Matrix matrix1, Matrix matrix2)
         {
-            int n = matrix1.GetSizeOfMatrix()[0];
-            int m = matrix1.GetSizeOfMatrix()[1];
+            int n = matrix1.GetNumberOfRows();
+            int m = matrix1.GetNumberOfColumns();
             Matrix sumMatrix = new Matrix(n, m);
 
             for (int i = 0; i < n; i++)
@@ -291,13 +298,14 @@ namespace Matrix
                     sumMatrix.array[i].SetComponent(j, matrix1.array[i].GetComponent(j) + matrix2.array[i].GetComponent(j));
                 }
             }
+
             return sumMatrix;
         }
 
         public static Matrix Difference(Matrix matrix1, Matrix matrix2)
         {
-            int n = matrix1.GetSizeOfMatrix()[0];
-            int m = matrix1.GetSizeOfMatrix()[1];
+            int n = matrix1.GetNumberOfRows();
+            int m = matrix1.GetNumberOfColumns();
             Matrix outputMatrix = new Matrix(n, m);
 
             for (int i = 0; i < n; i++)
@@ -307,14 +315,15 @@ namespace Matrix
                     outputMatrix.array[i].SetComponent(j, matrix1.array[i].GetComponent(j) - matrix2.array[i].GetComponent(j));
                 }
             }
+
             return outputMatrix;
         }
 
         public static Matrix Multiplicate(Matrix matrix1, Matrix matrix2)
         {
-            int n = matrix1.GetSizeOfMatrix()[0];
-            int m = matrix2.GetSizeOfMatrix()[1];
-            int l = matrix1.GetSizeOfMatrix()[1];
+            int n = matrix1.GetNumberOfRows();
+            int m = matrix2.GetNumberOfColumns();
+            int l = matrix1.GetNumberOfColumns();
             Matrix outputMatrix = new Matrix(m, n);
             double sum = 0;
 
@@ -330,6 +339,7 @@ namespace Matrix
                     sum = 0;
                 }
             }
+
             return outputMatrix;
         }
     }

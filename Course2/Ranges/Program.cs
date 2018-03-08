@@ -11,7 +11,7 @@ namespace Range
         static void Main(string[] args)
         {
             Range range1 = new Range(3, 6);
-            Range range2 = new Range(3, 10);
+            Range range2 = new Range(1, 3);
 
             Console.WriteLine("Длина интервала ({0}, {1}) равна {2}.", range1.From, range1.To, range1.Length);
 
@@ -25,7 +25,7 @@ namespace Range
             }
             else
             {
-                Console.WriteLine(0);
+                Console.WriteLine("Пересечения интервалов ({0}, {1}) и ({2}, {3}) нет.", range1.From, range1.To, range2.From, range2.To);
             }
 
             foreach (Range range in arrayResult)

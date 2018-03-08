@@ -11,10 +11,10 @@ namespace Range
         public double From { get; set; }
         public double To { get; set; }
         
-        public Range(double From, double To)
+        public Range(double from, double to)
         {
-            this.From = From;
-            this.To = To;
+            From = from;
+            To = to;
         }
 
         public double Length
