@@ -12,14 +12,14 @@ using System.Collections;
 
 namespace Shape
 {
-    public class AreaComparer : IComparer
-    {
-        public int Compare(Object x, Object y)
-        {
+    //public class AreaComparer : IComparer
+    //{
+    //    public int Compare(Object x, Object y)
+    //    {
             
-            return 0;
-        }
-    }
+    //        return 0;
+    //    }
+    //}
 
     class Program
     {
@@ -37,16 +37,18 @@ namespace Shape
             circle firstCircle = new circle(2);
             circle secondCircle = new circle(8);
 
-            Console.WriteLine(firstRectangle.GetArea());
-
             shape[] array = { firstSquare, secondSquare, firstTriangle, secondTriangle, firstRectangle, secondRectangle, firstCircle, secondCircle };
 
-            Array.Sort(array, square.SortByArea());
+            //Array.Sort(array, square.SortByArea());
+            //Console.WriteLine(array[array.Length - 1].ToString());
 
-            foreach (shape s in array)
-            {
-                Console.WriteLine(s);
-            }
+            Array.Sort(array, square.SortByPerimeter());
+            Console.WriteLine(array[array.Length - 2].ToString());
+
+            //foreach (shape s in array)
+            //{
+            //    Console.WriteLine(s.GetPerimeter());
+            //}
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -61,9 +62,66 @@ namespace Shape
             return "((" + x1 + ", " + y1 + "), (" + x2 + ", " + y2 + "),(" + x3 + ", " + y3 + "))";
         }
 
-        public int CompareTo(Shape shape)
+        private class SortByAreaHelper : IComparer
         {
-            return GetArea().CompareTo(shape.GetArea());
+            int IComparer.Compare(object a, object b)
+            {
+                Shape shape1 = (Shape)a;
+                Shape shape2 = (Shape)b;
+
+                if (shape1.GetArea() > shape2.GetArea())
+                {
+                    return 1;
+                }
+                if (shape1.GetArea() < shape2.GetArea())
+                {
+                    return -1;
+                }
+
+                return 0;
+            }
+        }
+
+        int IComparable.CompareTo(object obj)
+        {
+            Shape shape = (Shape)obj;
+            return string.Compare(GetArea().ToString(), shape.GetArea().ToString());
+        }
+
+        public static IComparer SortByArea()
+        {
+            return new SortByAreaHelper();
+        }
+
+        private class SortByPerimeterHelper : IComparer
+        {
+            int IComparer.Compare(object a, object b)
+            {
+                Shape shape1 = (Shape)a;
+                Shape shape2 = (Shape)b;
+
+                if (shape1.GetPerimeter() > shape2.GetPerimeter())
+                {
+                    return 1;
+                }
+                if (shape1.GetPerimeter() < shape2.GetPerimeter())
+                {
+                    return -1;
+                }
+
+                return 0;
+            }
+        }
+
+        //int IComparable.CompareTo(object obj)
+        //{
+        //    Shape shape = (Shape)obj;
+        //    return string.Compare(GetArea().ToString(), shape.GetArea().ToString());
+        //}
+
+        public static IComparer SortByPerimeter()
+        {
+            return new SortByPerimeterHelper();
         }
 
         public override bool Equals(object obj)

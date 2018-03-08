@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,5 @@ namespace Shape
         double GetHeight();
         double GetArea();
         double GetPerimeter();
-        int SortByArea();
     }
 }
