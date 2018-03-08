@@ -10,8 +10,8 @@ namespace Range
     {
         static void Main(string[] args)
         {
-            Range range1 = new Range(1, 4);
-            Range range2 = new Range(3, 6);
+            Range range1 = new Range(3, 6);
+            Range range2 = new Range(3, 10);
 
             Console.WriteLine("Длина интервала ({0}, {1}) равна {2}.", range1.From, range1.To, range1.Length);
 
@@ -40,7 +40,7 @@ namespace Range
                 Console.WriteLine("Объединение интервалов ({0}, {1}) и ({2}, {3}): ({4}, {5}).", range1.From, range1.To, range2.From, range2.To, range.From, range.To);
             }
 
-            double number = 10.0;
+            double number = 2.0;
 
             if (range1.IsInside(number))
             {

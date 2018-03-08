@@ -74,14 +74,7 @@ namespace Vector
 
         public override string ToString()
         {
-            StringBuilder builder = new StringBuilder("{ " + components[0].ToString());
-
-            for (int i = 1; i < this.GetSize(); i++)
-            {
-                builder.Append(", " + components[i]);
-            }
-
-            return builder.Append(" }").ToString();
+            return "{ " + string.Join(", ", components) + " }";
         }
 
         public Vector GetSum(Vector vector2)
@@ -178,17 +171,17 @@ namespace Vector
 
         public override bool Equals(object obj)
         {
-            if (obj == null)
+            if (ReferenceEquals(obj, this))
+            {
+                return true;
+            }
+
+            if (ReferenceEquals(obj, null) || obj.GetType() != this.GetType())
             {
                 return false;
             }
 
-            Vector vector = obj as Vector;
-
-            if (vector as Vector == null)
-            {
-                return false;
-            }
+            Vector vector = (Vector)obj;
 
             if (vector.GetSize() != GetSize())
             {

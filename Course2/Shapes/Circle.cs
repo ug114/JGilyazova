@@ -17,12 +17,12 @@ namespace Shape
 
         public double GetWidth()
         {
-            return this.radius * 2;
+            return radius * 2;
         }
 
         public double GetHeight()
         {
-            return this.radius * 2;
+            return radius * 2;
         }
 
         public double GetArea()
@@ -40,35 +40,32 @@ namespace Shape
             return radius.ToString();
         }
 
-        public int CompareTo(Object obj)
+        public int CompareTo(Shape shape)
         {
-            return 0;
+            return GetArea().CompareTo(shape.GetArea());
         }
 
         public override bool Equals(object obj)
         {
-            if (obj == null)
+            if (ReferenceEquals(obj, this))
+            {
+                return true;
+            }
+
+            if (ReferenceEquals(obj, null) || obj.GetType() != GetType())
             {
                 return false;
             }
 
-            Circle circle = obj as Circle;
-            if (circle as Circle == null)
-            {
-                return false;
-            }
+            Circle circle = (Circle)obj;
+            double eps = 1e-5;
 
-            return circle.radius == this.radius;
+            return (circle.radius - radius) < eps;
         }
 
         public override int GetHashCode()
         {
-            int prime = 13;
-            int hash = 1;
-
-            hash = prime * hash + (int)radius;
-
-            return hash;
+            return (int)radius;
         }
     }
 }

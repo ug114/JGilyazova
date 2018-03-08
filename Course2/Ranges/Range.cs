@@ -11,30 +11,30 @@ namespace Range
         public double From { get; set; }
         public double To { get; set; }
         
-        public Range(double From, double to)
+        public Range(double From, double To)
         {
             this.From = From;
-            this.To = to;
+            this.To = To;
         }
 
         public double Length
         {
             get
             {
-                return this.To - this.From;
+                return To - From;
             }
         }
 
         public bool IsInside(double number)
         {
-            return number <= this.To && number >= this.From;
+            return number <= To && number >= From;
         }
 
         public Range GetIntersection(Range range)
         {
-            if (Math.Max(this.From, range.From) < Math.Min(this.To, range.To))
+            if (Math.Max(From, range.From) < Math.Min(To, range.To))
             {
-                return new Range(Math.Max(this.From, range.From), Math.Min(this.To, range.To));
+                return new Range(Math.Max(From, range.From), Math.Min(To, range.To));
             }
             else
             {
@@ -44,37 +44,37 @@ namespace Range
 
         public Range[] GetUnion(Range range)
         {
-            if (Math.Max(this.From, range.From) > Math.Min(this.To, range.To))
+            if (Math.Max(From, range.From) > Math.Min(To, range.To))
             {
-                return new Range[] { new Range(this.From, this.To), new Range(range.From, range.To) };
+                return new Range[] { new Range(From, To), new Range(range.From, range.To) };
             }
             else
             {
-                return new Range[] { new Range(Math.Min(this.From, range.From), Math.Max(this.To, range.To)) };
+                return new Range[] { new Range(Math.Min(From, range.From), Math.Max(To, range.To)) };
             }
         }
 
         public Range[] GetDifference(Range range)
         {
-            if (this.From == range.From && this.To == range.To)
+            if (From == range.From && To == range.To)
             {
                 return new Range[0];
             }
-            if (range.From > this.From && range.To < this.To)
+            if (range.From > From && range.To < To)
             {
-                return new Range[] { new Range(this.From, range.From), new Range(range.To, this.To) };
+                return new Range[] { new Range(From, range.From), new Range(range.To, To) };
             }
-            if (this.To <= range.From || this.From >= range.To)
+            if (To <= range.From || From >= range.To)
             {
-                return new Range[] { new Range(this.From, this.To) };
+                return new Range[] { new Range(From, To) };
             }
-            if (range.To < this.To)
+            if (range.To < To)
             {
-                return new Range[] { new Range(range.To, this.To) };
+                return new Range[] { new Range(range.To, To) };
             }
-            if (range.From < this.To && range.From > this.From)
+            if (range.From < To && range.From > From)
             {
-                return new Range[] { new Range(this.From, range.From) };
+                return new Range[] { new Range(From, range.From) };
             }
 
             return new Range[0];

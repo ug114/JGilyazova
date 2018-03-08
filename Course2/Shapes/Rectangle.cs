@@ -42,25 +42,27 @@ namespace Shape
             return height + ", " + width;
         }
 
-        public int CompareTo(Object obj)
+        public int CompareTo(Shape shape)
         {
-            return 0;
+            return GetArea().CompareTo(shape.GetArea());
         }
 
         public override bool Equals(object obj)
         {
-            if (obj == null)
+            if (ReferenceEquals(obj, this))
+            {
+                return true;
+            }
+
+            if (ReferenceEquals(obj, null) || obj.GetType() != GetType())
             {
                 return false;
             }
 
-            Rectangle rectangle = obj as Rectangle;
-            if (rectangle as Rectangle == null)
-            {
-                return false;
-            }
+            Rectangle rectangle = (Rectangle)obj;
+            double eps = 1e-5;
 
-            return rectangle.height == height && rectangle.width == width;
+            return (rectangle.height - height) < eps && (rectangle.width - width) < eps;
         }
 
         public override int GetHashCode()

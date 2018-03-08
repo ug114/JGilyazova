@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -40,35 +41,63 @@ namespace Shape
             return lengthOfSide.ToString();
         }
 
-        public int CompareTo(object obj)
+        //public int CompareTo(Shape shape)
+        //{
+        //    return GetArea().CompareTo(shape.GetArea());
+        //}
+
+        private class SortByAreaHelper : IComparer
         {
-            return 0;
+            int IComparer.Compare(object a, object b)
+            {
+                Shape shape1 = (Shape)a;
+                Shape shape2 = (Shape)b;
+
+                if (shape1.GetArea() > shape2.GetArea())
+                {
+                    return 1;
+                }
+                if (shape1.GetArea() < shape2.GetArea())
+                {
+                    return -1;
+                }
+
+                return 0;
+            }
+        }
+
+        int IComparable.CompareTo(object obj)
+        {
+            Shape shape = (Shape)obj;
+            return string.Compare(GetArea().ToString(), shape.GetArea().ToString());
+        }
+
+        public static IComparer SortByArea()
+        {
+            return (IComparer)new SortByAreaHelper();
         }
 
         public override bool Equals(object obj)
         {
-            if (obj == null)
+            if (ReferenceEquals(obj, this))
+            {
+                return true;
+            }
+
+            if (ReferenceEquals(obj, null) || obj.GetType() != GetType())
             {
                 return false;
             }
 
-            Square square = obj as Square;
-            if (square as Square == null)
-            {
-                return false;
-            }
+            Square square = (Square)obj;
+            double eps = 1e-5;
 
-            return square.lengthOfSide == lengthOfSide;
+            return (square.lengthOfSide - lengthOfSide) < eps;
         }
 
         public override int GetHashCode()
         {
-            int prime = 19;
-            int hash = 1;
-
-            hash = prime * hash + (int)lengthOfSide;
-
-            return hash;
+            return (int)lengthOfSide;
         }
     }
 }

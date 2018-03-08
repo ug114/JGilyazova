@@ -8,9 +8,19 @@ using triangle = Shape.Triangle;
 using rectangle = Shape.Rectangle;
 using circle = Shape.Circle;
 using shape = Shape.Shape;
+using System.Collections;
 
 namespace Shape
 {
+    public class AreaComparer : IComparer
+    {
+        public int Compare(Object x, Object y)
+        {
+            
+            return 0;
+        }
+    }
+
     class Program
     {
         static void Main(string[] args)
@@ -30,6 +40,13 @@ namespace Shape
             Console.WriteLine(firstRectangle.GetArea());
 
             shape[] array = { firstSquare, secondSquare, firstTriangle, secondTriangle, firstRectangle, secondRectangle, firstCircle, secondCircle };
+
+            Array.Sort(array, square.SortByArea());
+
+            foreach (shape s in array)
+            {
+                Console.WriteLine(s);
+            }
         }
     }
 }

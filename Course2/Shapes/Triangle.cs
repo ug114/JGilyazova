@@ -61,25 +61,27 @@ namespace Shape
             return "((" + x1 + ", " + y1 + "), (" + x2 + ", " + y2 + "),(" + x3 + ", " + y3 + "))";
         }
 
-        public int CompareTo(object obj)
+        public int CompareTo(Shape shape)
         {
-            return 0;
+            return GetArea().CompareTo(shape.GetArea());
         }
 
         public override bool Equals(object obj)
         {
-            if (obj == null)
+            if (ReferenceEquals(obj, this))
+            {
+                return true;
+            }
+
+            if (ReferenceEquals(obj, null) || obj.GetType() != this.GetType())
             {
                 return false;
             }
 
-            Triangle triangle = obj as Triangle;
-            if (triangle as Triangle == null)
-            {
-                return false;
-            }
+            Triangle triangle = (Triangle)obj;
+            double eps = 1e-5;
 
-            return triangle.x1 == x1 && triangle.x2 == x2 && triangle.x3 == x3 && triangle.y1 == y1 && triangle.y2 == y2 && triangle.y3 == y3;
+            return (triangle.x1 - x1) < eps && (triangle.x2 - x2) < eps && (triangle.x3 - x3) < eps && (triangle.y1 - y1) < eps && (triangle.y2 - y2) < eps && (triangle.y3 - y3) < eps;
         }
 
         public override int GetHashCode()
