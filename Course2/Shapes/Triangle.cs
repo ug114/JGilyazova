@@ -137,9 +137,8 @@ namespace Shape
             }
 
             Triangle triangle = (Triangle)obj;
-            double eps = 1e-5;
-
-            return (triangle.x1 - x1) < eps && (triangle.x2 - x2) < eps && (triangle.x3 - x3) < eps && (triangle.y1 - y1) < eps && (triangle.y2 - y2) < eps && (triangle.y3 - y3) < eps;
+            
+            return triangle.x1 == x1 && triangle.x2 == x2 && triangle.x3 == x3 && triangle.y1 == y1 && triangle.y2 == y2 && triangle.y3 == y3;
         }
 
         public override int GetHashCode()

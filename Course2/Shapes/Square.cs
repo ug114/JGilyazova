@@ -121,9 +121,8 @@ namespace Shape
             }
 
             Square square = (Square)obj;
-            double eps = 1e-5;
-
-            return (square.lengthOfSide - lengthOfSide) < eps;
+            
+            return square.lengthOfSide == lengthOfSide;
         }
 
         public override int GetHashCode()

@@ -12,59 +12,44 @@ namespace Vector
 
         public Vector(int n)
         {
-            try
+            if (n <= 0)
             {
-                if (n <= 0)
-                {
-                    throw new ArgumentException();
-                }
-            }
-            catch (ArgumentException)
-            {
-                Console.WriteLine("Размерность вектора должна быть > 0.");
+                throw new ArgumentException();
             }
 
             components = new double[n];
-
-            for (int i = 0; i < n; i++)
-            {
-                components[i] = 0;
-            }
         }
 
         public Vector(Vector vector)
         {
-            for (int i = 0; i < vector.GetSize(); i++)
+            int size = vector.GetSize();
+
+            if (size <= 0)
             {
-                components[i] = vector.components[i];
+                throw new ArgumentException();
             }
+
+            vector.components.CopyTo(components = new double[size], 0);
         }
 
         public Vector(double[] array)
         {
-            components = new double[array.Length];
-
-            for (int i = 0; i < array.Length; i++)
+            if (array.Length <= 0)
             {
-                components[i] = array[i];
+                throw new ArgumentException();
             }
+
+            array.CopyTo(components = new double[array.Length], 0);
         }
 
         public Vector(int n, double[] array)
         {
-            components = new double[n];
-
-            for (int i = 0; i < n; i++)
+            if (n <= 0)
             {
-                if (i >= array.Length)
-                {
-                    components[i] = 0;
-                }
-                else
-                {
-                    components[i] = array[i];
-                }
+                throw new ArgumentException();
             }
+
+            array.CopyTo(components = new double[n], 0);
         }
 
         public int GetSize()
@@ -79,9 +64,21 @@ namespace Vector
 
         public Vector GetSum(Vector vector2)
         {
-            for (int i = 0; i < GetSize(); i++)
+            int minSize = Math.Min(GetSize(), vector2.GetSize());
+            int maxSize = Math.Min(GetSize(), vector2.GetSize());
+
+            if (GetSize() < vector2.GetSize())
             {
-                if (i < vector2.GetSize())
+                Array.Resize(ref components, maxSize);
+                
+                for (int i = 0; i < maxSize; i++)
+                {
+                    components[i] += vector2.components[i];
+                }
+            }
+            else
+            {
+                for (int i = 0; i < minSize; i++)
                 {
                     components[i] += vector2.components[i];
                 }
@@ -92,9 +89,21 @@ namespace Vector
 
         public Vector GetDifference(Vector vector2)
         {
-            for (int i = 0; i < GetSize(); i++)
+            int minSize = Math.Min(GetSize(), vector2.GetSize());
+            int maxSize = Math.Min(GetSize(), vector2.GetSize());
+
+            if (GetSize() < vector2.GetSize())
             {
-                if (i < vector2.GetSize())
+                Array.Resize(ref components, maxSize);
+
+                for (int i = 0; i < maxSize; i++)
+                {
+                    components[i] -= vector2.components[i];
+                }
+            }
+            else
+            {
+                for (int i = 0; i < minSize; i++)
                 {
                     components[i] -= vector2.components[i];
                 }
@@ -115,12 +124,7 @@ namespace Vector
 
         public Vector Reverse()
         {
-            for (int i = 0; i < GetSize(); i++)
-            {
-                components[i] *= -1;
-            }
-
-            return this;
+            return MultiplyByScalar(-1);
         }
 
         public double GetComponent(int index)
@@ -137,11 +141,11 @@ namespace Vector
         {
             if (vector1.GetSize() < vector2.GetSize())
             {
-                return vector2.GetSum(vector1);
+                return new Vector(vector2).GetSum(vector1);
             }
             else
             {
-                return vector1.GetSum(vector2);
+                return new Vector(vector1).GetSum(vector2);
             }
         }
 
@@ -149,19 +153,20 @@ namespace Vector
         {
             if (vector1.GetSize() < vector2.GetSize())
             {
-                return vector2.GetDifference(vector1);
+                return new Vector(vector2).GetDifference(vector1);
             }
             else
             {
-                return vector1.GetDifference(vector2);
+                return new Vector(vector1).GetDifference(vector2);
             }
         }
 
         public static double GetScalarMultiplication(Vector vector1, Vector vector2)
         {
             double sum = 0;
+            int minSize = Math.Min(vector1.GetSize(), vector2.GetSize());
 
-            for (int i = 0; i < Math.Min(vector1.GetSize(), vector2.GetSize()); i++)
+            for (int i = 0; i < minSize; i++)
             {
                 sum += vector1.components[i] * vector2.components[i];
             }
@@ -189,11 +194,9 @@ namespace Vector
             }
             else
             {
-                double eps = 1e-5;
-
                 for (int i = 0; i < GetSize(); i++)
                 {
-                    if ((vector.GetComponent(i) - GetComponent(i)) > eps)
+                    if (vector.GetComponent(i) != GetComponent(i))
                     {
                         return false;
                     }
@@ -208,9 +211,9 @@ namespace Vector
             int prime = 13;
             int hash = 1;
 
-            for (int i = 0; i < GetSize(); i++)
+            foreach (double component in components)
             {
-                hash = prime * hash + (int)components[i];
+                hash = prime * hash + (int)component;
             }
 
             return hash;

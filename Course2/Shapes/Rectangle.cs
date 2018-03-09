@@ -123,9 +123,8 @@ namespace Shape
             }
 
             Rectangle rectangle = (Rectangle)obj;
-            double eps = 1e-5;
-
-            return (rectangle.height - height) < eps && (rectangle.width - width) < eps;
+            
+            return rectangle.height == height && rectangle.width == width;
         }
 
         public override int GetHashCode()

@@ -121,9 +121,8 @@ namespace Shape
             }
 
             Circle circle = (Circle)obj;
-            double eps = 1e-5;
-
-            return (circle.radius - radius) < eps;
+            
+            return circle.radius == radius;
         }
 
         public override int GetHashCode()

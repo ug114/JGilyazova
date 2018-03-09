@@ -10,8 +10,8 @@ namespace Range
     {
         static void Main(string[] args)
         {
-            Range range1 = new Range(3, 6);
-            Range range2 = new Range(1, 3);
+            Range range1 = new Range(1, 2.1);
+            Range range2 = new Range(2.1, 4);
 
             Console.WriteLine("Длина интервала ({0}, {1}) равна {2}.", range1.From, range1.To, range1.Length);
 

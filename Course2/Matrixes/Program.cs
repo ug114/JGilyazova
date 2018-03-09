@@ -24,24 +24,16 @@ namespace Matrix
             vector v2 = new vector(array2);
             Matrix matrix4 = new Matrix(new vector[] { v1, v2 });
 
-            Console.WriteLine(matrix4.GetNumberOfColumns());
+            Console.WriteLine(matrix4.ToString());
+            Console.WriteLine("Число столбцов матрицы: {0}.\n", matrix4.GetNumberOfColumns());
 
             matrix4.Multiple(2);
 
-            Console.WriteLine(matrix3.ToString());
-            Console.WriteLine(matrix4.ToString());
-            Console.WriteLine(Matrix.Multiplicate(matrix3, matrix4).ToString());
-            Console.WriteLine(matrix3.GetDeterminant());
+            Console.WriteLine("Результат умножения матрицы {0} на {1} равен {2}.\n", matrix3.ToString(), matrix4.ToString(), Matrix.Multiplicate(matrix3, matrix4).ToString());
+            
+            Console.WriteLine("Определитель матрицы {0} равен {1}.\n", matrix3.ToString(), matrix3.GetDeterminant());
 
-            for (int i = 0; i < 2; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    Console.Write(" {0}", matrix4.GetString(i).GetComponent(j));
-                }
-                Console.WriteLine();
-            }
-            Console.WriteLine(matrix4.MultipleVector(v1).ToString());
+            Console.WriteLine("Результат умножения матрицы {0} на вектор {1} равен {2}.\n", matrix4.ToString(), v1.ToString(), matrix4.MultipleVector(v1).ToString());
         }
     }
 }
