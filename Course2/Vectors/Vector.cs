@@ -35,15 +35,13 @@ namespace Vector
 
         public Vector(int n, double[] array)
         {
-            int size = Math.Max(n, array.Length);
-
-            if (size <= 0)
+            if (n <= 0)
             {
                 throw new ArgumentException("Размерность вектора должна быть > 0.");
             }
-
-            components = new double[size];
-            array.CopyTo(components, 0);
+            
+            components = new double[n];
+            Array.Copy(array, 0, components, 0, Math.Min(n, array.Length));
         }
 
         public int GetSize()
@@ -61,21 +59,17 @@ namespace Vector
             int minSize = Math.Min(GetSize(), vector2.GetSize());
             int maxSize = Math.Max(GetSize(), vector2.GetSize());
 
+            if (minSize != maxSize)
+            {
+                Array.Resize(ref components, maxSize);
+                Array.Copy(GetSize() > vector2.GetSize() ? components : vector2.components, minSize, components, minSize, maxSize - minSize);
+            }
+            
             for (int i = 0; i < minSize; i++)
             {
                 components[i] += vector2.components[i];
             }
 
-            if (GetSize() < vector2.GetSize())
-            {
-                Array.Resize(ref components, maxSize);
-                
-                for (int i = minSize; i < maxSize; i++)
-                {
-                    components[i] += vector2.components[i];
-                }
-            }
-           
             return this;
         }
 
@@ -84,21 +78,17 @@ namespace Vector
             int minSize = Math.Min(GetSize(), vector2.GetSize());
             int maxSize = Math.Max(GetSize(), vector2.GetSize());
 
+            if (GetSize() < vector2.GetSize())
+            {
+                Array.Resize(ref components, maxSize);
+                Array.Copy(GetSize() > vector2.GetSize() ? components : new Vector(vector2).Reverse().components, minSize, components, minSize, maxSize - minSize);
+            }
+
             for (int i = 0; i < minSize; i++)
             {
                 components[i] -= vector2.components[i];
             }
 
-            if (GetSize() < vector2.GetSize())
-            {
-                Array.Resize(ref components, maxSize);
-
-                for (int i = minSize; i < maxSize; i++)
-                {
-                    components[i] -= vector2.components[i];
-                }
-            }
-           
             return this;
         }
 
