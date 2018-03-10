@@ -14,42 +14,36 @@ namespace Vector
         {
             if (n <= 0)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Размерность вектора должна быть > 0.");
             }
 
             components = new double[n];
         }
 
-        public Vector(Vector vector)
-        {
-            int size = vector.GetSize();
-
-            if (size <= 0)
-            {
-                throw new ArgumentException();
-            }
-
-            vector.components.CopyTo(components = new double[size], 0);
-        }
+        public Vector(Vector vector): this(vector.components) { }
 
         public Vector(double[] array)
         {
             if (array.Length <= 0)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Размерность вектора должна быть > 0.");
             }
 
-            array.CopyTo(components = new double[array.Length], 0);
+            components = new double[array.Length]; 
+            array.CopyTo(components, 0);
         }
 
         public Vector(int n, double[] array)
         {
-            if (n <= 0)
+            int size = Math.Max(n, array.Length);
+
+            if (size <= 0)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Размерность вектора должна быть > 0.");
             }
 
-            array.CopyTo(components = new double[n], 0);
+            components = new double[size];
+            array.CopyTo(components, 0);
         }
 
         public int GetSize()
@@ -65,50 +59,46 @@ namespace Vector
         public Vector GetSum(Vector vector2)
         {
             int minSize = Math.Min(GetSize(), vector2.GetSize());
-            int maxSize = Math.Min(GetSize(), vector2.GetSize());
+            int maxSize = Math.Max(GetSize(), vector2.GetSize());
+
+            for (int i = 0; i < minSize; i++)
+            {
+                components[i] += vector2.components[i];
+            }
 
             if (GetSize() < vector2.GetSize())
             {
                 Array.Resize(ref components, maxSize);
                 
-                for (int i = 0; i < maxSize; i++)
+                for (int i = minSize; i < maxSize; i++)
                 {
                     components[i] += vector2.components[i];
                 }
             }
-            else
-            {
-                for (int i = 0; i < minSize; i++)
-                {
-                    components[i] += vector2.components[i];
-                }
-            }
-
+           
             return this;
         }
 
         public Vector GetDifference(Vector vector2)
         {
             int minSize = Math.Min(GetSize(), vector2.GetSize());
-            int maxSize = Math.Min(GetSize(), vector2.GetSize());
+            int maxSize = Math.Max(GetSize(), vector2.GetSize());
+
+            for (int i = 0; i < minSize; i++)
+            {
+                components[i] -= vector2.components[i];
+            }
 
             if (GetSize() < vector2.GetSize())
             {
                 Array.Resize(ref components, maxSize);
 
-                for (int i = 0; i < maxSize; i++)
+                for (int i = minSize; i < maxSize; i++)
                 {
                     components[i] -= vector2.components[i];
                 }
             }
-            else
-            {
-                for (int i = 0; i < minSize; i++)
-                {
-                    components[i] -= vector2.components[i];
-                }
-            }
-
+           
             return this;
         }
 
@@ -139,26 +129,12 @@ namespace Vector
 
         public static Vector GetSum(Vector vector1, Vector vector2)
         {
-            if (vector1.GetSize() < vector2.GetSize())
-            {
-                return new Vector(vector2).GetSum(vector1);
-            }
-            else
-            {
-                return new Vector(vector1).GetSum(vector2);
-            }
+            return new Vector(vector1).GetSum(vector2);
         }
 
         public static Vector GetDifference(Vector vector1, Vector vector2)
         {
-            if (vector1.GetSize() < vector2.GetSize())
-            {
-                return new Vector(vector2).GetDifference(vector1);
-            }
-            else
-            {
-                return new Vector(vector1).GetDifference(vector2);
-            }
+            return new Vector(vector1).GetDifference(vector2);
         }
 
         public static double GetScalarMultiplication(Vector vector1, Vector vector2)

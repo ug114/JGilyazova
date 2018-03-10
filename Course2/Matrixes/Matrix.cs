@@ -97,16 +97,17 @@ namespace Matrix
         {
             vector column = new vector(GetNumberOfColumns());
             int n = GetNumberOfRows();
+
             for (int i = 0; i < n; i++)
             {
                 column.SetComponent(i, array[numberOfColumn].GetComponent(i));
             }
+
             return column;
         }
 
         public void Transpose()
         {
-            double temp;
             int n = GetNumberOfRows();
             int m = GetNumberOfColumns();
 
@@ -116,7 +117,7 @@ namespace Matrix
                 {
                     if (j > i)
                     {
-                        temp = array[i].GetComponent(j);
+                        double temp = array[i].GetComponent(j);
                         array[i].SetComponent(j, array[j].GetComponent(i));
                         array[j].SetComponent(i, temp);
                     }
