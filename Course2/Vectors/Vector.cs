@@ -59,10 +59,10 @@ namespace Vector
             int minSize = Math.Min(GetSize(), vector2.GetSize());
             int maxSize = Math.Max(GetSize(), vector2.GetSize());
 
-            if (minSize != maxSize)
+            if (GetSize() < vector2.GetSize())
             {
                 Array.Resize(ref components, maxSize);
-                Array.Copy(GetSize() > vector2.GetSize() ? components : vector2.components, minSize, components, minSize, maxSize - minSize);
+                Array.Copy(vector2.components, minSize, components, minSize, maxSize - minSize);
             }
             
             for (int i = 0; i < minSize; i++)
@@ -81,7 +81,7 @@ namespace Vector
             if (GetSize() < vector2.GetSize())
             {
                 Array.Resize(ref components, maxSize);
-                Array.Copy(GetSize() > vector2.GetSize() ? components : new Vector(vector2).Reverse().components, minSize, components, minSize, maxSize - minSize);
+                Array.Copy(new Vector(vector2).Reverse().components, minSize, components, minSize, maxSize - minSize);
             }
 
             for (int i = 0; i < minSize; i++)
