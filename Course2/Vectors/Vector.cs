@@ -57,12 +57,11 @@ namespace Vector
         public Vector GetSum(Vector vector2)
         {
             int minSize = Math.Min(GetSize(), vector2.GetSize());
-            int maxSize = Math.Max(GetSize(), vector2.GetSize());
-
+            
             if (GetSize() < vector2.GetSize())
             {
-                Array.Resize(ref components, maxSize);
-                Array.Copy(vector2.components, minSize, components, minSize, maxSize - minSize);
+                Array.Resize(ref components, vector2.GetSize());
+                Array.Copy(vector2.components, minSize, components, minSize, vector2.GetSize() - minSize);
             }
             
             for (int i = 0; i < minSize; i++)
@@ -76,12 +75,11 @@ namespace Vector
         public Vector GetDifference(Vector vector2)
         {
             int minSize = Math.Min(GetSize(), vector2.GetSize());
-            int maxSize = Math.Max(GetSize(), vector2.GetSize());
-
+            
             if (GetSize() < vector2.GetSize())
             {
-                Array.Resize(ref components, maxSize);
-                Array.Copy(new Vector(vector2).Reverse().components, minSize, components, minSize, maxSize - minSize);
+                Array.Resize(ref components, vector2.GetSize());
+                Array.Copy(new Vector(vector2).Reverse().components, minSize, components, minSize, vector2.GetSize() - minSize);
             }
 
             for (int i = 0; i < minSize; i++)

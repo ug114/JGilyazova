@@ -15,7 +15,7 @@ namespace Vector
             try
             {
                 vector0 = new Vector(new double[] { 1, 2, 3 });
-                vector2 = new Vector(4, new double[] { 1, 2, 9, 10 });
+                vector2 = new Vector(5, new double[] { 1, 2, 9, 10 });
                 vector3 = new Vector(new double[] { 1, 1, 1 });
                 vector4 = new Vector(5, new double[] { 1, 8 });
                 vector1 = new Vector(0);
