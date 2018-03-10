@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using vector = Vector.Vector;
 
 namespace Matrix
 {
-    class Matrix
+    public class Matrix
     {
         private vector[] array;
 
@@ -23,7 +20,7 @@ namespace Matrix
 
         public Matrix(Matrix matrix)
         {
-            int numberOfRows = matrix.array.Length;
+            int numberOfRows = matrix.GetNumberOfRows();
             array = new vector[numberOfRows];
                         
             matrix.array.CopyTo(array, 0);
@@ -90,7 +87,7 @@ namespace Matrix
             return column;
         }
 
-        public void Transpose()
+        public Matrix Transpose()
         {
             int numberOfRows = GetNumberOfRows();
             int numberOfColumns = GetNumberOfColumns();
@@ -107,6 +104,8 @@ namespace Matrix
                     }
                 }
             }
+
+            return this;
         }
 
         public Matrix MultiplyByScalar(double scalar)
@@ -254,7 +253,7 @@ namespace Matrix
         {
             int numberOfRows = matrix1.GetNumberOfRows();
             int numberOfColumns = matrix2.GetNumberOfColumns();
-            Matrix outputMatrix = new Matrix(numberOfColumns, numberOfRows);
+            Matrix outputMatrix = new Matrix(numberOfRows, numberOfColumns);
             
             for (int i = 0; i < numberOfRows; i++)
             {
