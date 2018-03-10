@@ -24,18 +24,9 @@ namespace Matrix
         public Matrix(Matrix matrix)
         {
             int n = matrix.array.Length;
-            int m = matrix.array[0].GetSize();
-            array = new vector[n];
-
-            for (int i = 0; i < n; i++)
-            {
-                array[i] = new vector(m);
-
-                for (int j = 0; j < m; j++)
-                {
-                    array[i].SetComponent(j, matrix.array[i].GetComponent(j));
-                }
-            }
+             array = new vector[n];
+                        
+            matrix.array.CopyTo(array, 0);
         }
 
         public Matrix(double[,] array)
@@ -47,6 +38,7 @@ namespace Matrix
             for (int i = 0; i < n; i++)
             {
                 this.array[i] = new vector(m);
+
                 for (int j = 0; j < m; j++)
                 {
                     this.array[i].SetComponent(j, array[i, j]);
@@ -57,16 +49,11 @@ namespace Matrix
         public Matrix(vector[] array)
         {
             int n = array.Length;
-            int m = array[0].GetSize();
             this.array = new vector[n];
 
             for (int i = 0; i < n; i++)
             {
-                this.array[i] = new vector(m);
-                for (int j = 0; j < m; j++)
-                {
-                    this.array[i].SetComponent(j, array[i].GetComponent(j));
-                }
+                this.array[i] = new vector(array[i]);
             }
         }
 
@@ -87,20 +74,17 @@ namespace Matrix
 
         public void SetString(int numberOfString, vector inputVector)
         {
-            for (int i = 0; i < inputVector.GetSize(); i++)
-            {
-                array[numberOfString].SetComponent(i, inputVector.GetComponent(i));
-            }
+            array[numberOfString] = new vector(inputVector);
         }
 
         public vector GetColumn(int numberOfColumn)
         {
-            vector column = new vector(GetNumberOfColumns());
             int n = GetNumberOfRows();
-
+            vector column = new vector(n);
+            
             for (int i = 0; i < n; i++)
             {
-                column.SetComponent(i, array[numberOfColumn].GetComponent(i));
+                column.SetComponent(i, array[i].GetComponent(numberOfColumn));
             }
 
             return column;
@@ -125,47 +109,27 @@ namespace Matrix
             }
         }
 
-        public void Multiple(double scalar)
+        public Matrix MultiplyByScalar(double scalar)
         {
             int n = GetNumberOfRows();
-            int m = GetNumberOfColumns();
-
+            
             for (int i = 0; i < n; i++)
             {
-                for (int j = 0; j < m; j++)
-                {
-                    array[i].SetComponent(j, array[i].GetComponent(j) * scalar);
-                }
+                array[i].MultiplyByScalar(scalar);
             }
+
+            return this;
         }
 
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder("{ ");
             int n = GetNumberOfRows();
-            int m = GetNumberOfColumns();
-
+            
             for (int i = 0; i < n; i++)
             {
-                for (int j = 0; j < m; j++)
-                {
-                    if (j == 0)
-                    {
-                        builder.Append("{");
-                    }
-
-                    builder.Append(array[i].GetComponent(j));
-
-                    if (j != m - 1)
-                    {
-                        builder.Append(", ");
-                    }
-
-                    if (j == m - 1)
-                    {
-                        builder.Append("}");
-                    }
-                }
+                builder.Append(array[i].ToString());
+                    
                 if (i != n - 1)
                 {
                     builder.Append(", ");
@@ -175,19 +139,15 @@ namespace Matrix
             return builder.Append(" }").ToString();
         }
 
-        public vector MultipleVector(vector vector)
+        public vector MultipleByVector(vector vector)
         {
             int n = GetNumberOfRows();
-            int m = GetNumberOfColumns();
             double sum = 0;
             vector outputVector = new vector(n);
 
             for (int i = 0; i < n; i++)
             {
-                for (int j = 0; j < m; j++)
-                {
-                    sum += array[i].GetComponent(j) * vector.GetComponent(j);
-                }
+                sum = vector.GetScalarMultiplication(array[i], vector);
                 outputVector.SetComponent(i, sum);
                 sum = 0;
             }
@@ -195,32 +155,28 @@ namespace Matrix
             return outputVector;
         }
 
-        public void Sum(Matrix inputMatrix)
+        public Matrix GetSum(Matrix inputMatrix)
         {
             int n = GetNumberOfRows();
-            int m = GetNumberOfColumns();
-
+            
             for (int i = 0; i < n; i++)
             {
-                for (int j = 0; j < m; j++)
-                {
-                   array[i].SetComponent(j, array[i].GetComponent(j) + inputMatrix.array[i].GetComponent(j));
-                }
+                array[i].GetSum(inputMatrix.array[i]);
             }
+
+            return this;
         }
 
-        public void Difference(Matrix inputMatrix)
+        public Matrix GetDifference(Matrix inputMatrix)
         {
             int n = GetNumberOfRows();
-            int m = GetNumberOfColumns();
-
+            
             for (int i = 0; i < n; i++)
             {
-                for (int j = 0; j < m; j++)
-                {
-                    array[i].SetComponent(j, array[i].GetComponent(j) - inputMatrix.array[i].GetComponent(j));
-                }
+                array[i].GetDifference(inputMatrix.array[i]);
             }
+
+            return this;
         }
 
         public double GetDeterminant()
@@ -286,58 +242,31 @@ namespace Matrix
             return det * Math.Pow(-1, numberOfChanges);
         }
 
-        public static Matrix Sum(Matrix matrix1, Matrix matrix2)
+        public static Matrix GetSum(Matrix matrix1, Matrix matrix2)
         {
-            int n = matrix1.GetNumberOfRows();
-            int m = matrix1.GetNumberOfColumns();
-            Matrix sumMatrix = new Matrix(n, m);
-
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = 0; j < m; j++)
-                {
-                    sumMatrix.array[i].SetComponent(j, matrix1.array[i].GetComponent(j) + matrix2.array[i].GetComponent(j));
-                }
-            }
-
-            return sumMatrix;
+            return new Matrix(matrix1).GetSum(matrix2);
         }
 
-        public static Matrix Difference(Matrix matrix1, Matrix matrix2)
+        public static Matrix GetDifference(Matrix matrix1, Matrix matrix2)
         {
-            int n = matrix1.GetNumberOfRows();
-            int m = matrix1.GetNumberOfColumns();
-            Matrix outputMatrix = new Matrix(n, m);
-
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = 0; j < m; j++)
-                {
-                    outputMatrix.array[i].SetComponent(j, matrix1.array[i].GetComponent(j) - matrix2.array[i].GetComponent(j));
-                }
-            }
-
-            return outputMatrix;
+            return new Matrix(matrix1).GetDifference(matrix2);
         }
 
         public static Matrix Multiplicate(Matrix matrix1, Matrix matrix2)
         {
             int n = matrix1.GetNumberOfRows();
             int m = matrix2.GetNumberOfColumns();
-            int l = matrix1.GetNumberOfColumns();
             Matrix outputMatrix = new Matrix(m, n);
-            double sum = 0;
-
+            
             for (int i = 0; i < n; i++)
             {
+                double sum = 0;
+
                 for (int j = 0; j < m; j++)
                 {
-                    for (int k = 0; k < l; k++)
-                    {
-                        sum += matrix1.array[i].GetComponent(k) * matrix2.array[k].GetComponent(j);
-                    }
+                    sum = vector.GetScalarMultiplication(matrix1.array[i], matrix2.GetColumn(j));
                     outputMatrix.array[i].SetComponent(j, sum);
-                    sum = 0;
+                    
                 }
             }
 
