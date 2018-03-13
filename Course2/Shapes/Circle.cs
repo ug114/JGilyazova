@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shape
+namespace Shapes
 {
     public class Circle : Shape, IComparable
     {
