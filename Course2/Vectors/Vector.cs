@@ -44,9 +44,12 @@ namespace Vectors
             Array.Copy(array, 0, components, 0, Math.Min(n, array.Length));
         }
 
-        public int GetSize()
+        public int Length
         {
-            return components.Length;
+            get
+            {
+                return components.Length;
+            }
         }
 
         public override string ToString()
@@ -56,12 +59,12 @@ namespace Vectors
 
         public Vector GetSum(Vector vector2)
         {
-            int minSize = Math.Min(GetSize(), vector2.GetSize());
+            int minSize = Math.Min(Length, vector2.Length);
             
-            if (GetSize() < vector2.GetSize())
+            if (Length < vector2.Length)
             {
-                Array.Resize(ref components, vector2.GetSize());
-                Array.Copy(vector2.components, minSize, components, minSize, vector2.GetSize() - minSize);
+                Array.Resize(ref components, vector2.Length);
+                Array.Copy(vector2.components, minSize, components, minSize, vector2.Length - minSize);
             }
             
             for (int i = 0; i < minSize; i++)
@@ -74,12 +77,12 @@ namespace Vectors
 
         public Vector GetDifference(Vector vector2)
         {
-            int minSize = Math.Min(GetSize(), vector2.GetSize());
+            int minSize = Math.Min(Length, vector2.Length);
             
-            if (GetSize() < vector2.GetSize())
+            if (Length < vector2.Length)
             {
-                Array.Resize(ref components, vector2.GetSize());
-                Array.Copy(new Vector(vector2).Reverse().components, minSize, components, minSize, vector2.GetSize() - minSize);
+                Array.Resize(ref components, vector2.Length);
+                Array.Copy(new Vector(vector2).Reverse().components, minSize, components, minSize, vector2.Length - minSize);
             }
 
             for (int i = 0; i < minSize; i++)
@@ -92,7 +95,7 @@ namespace Vectors
 
         public Vector MultiplyByScalar(double scalar)
         {
-            for (int i = 0; i < GetSize(); i++)
+            for (int i = 0; i < Length; i++)
             {
                 components[i] *= scalar;
             }
@@ -128,7 +131,7 @@ namespace Vectors
         public static double GetScalarMultiplication(Vector vector1, Vector vector2)
         {
             double sum = 0;
-            int minSize = Math.Min(vector1.GetSize(), vector2.GetSize());
+            int minSize = Math.Min(vector1.Length, vector2.Length);
 
             for (int i = 0; i < minSize; i++)
             {
@@ -152,13 +155,13 @@ namespace Vectors
 
             Vector vector = (Vector)obj;
 
-            if (vector.GetSize() != GetSize())
+            if (vector.Length != Length)
             {
                 return false;
             }
             else
             {
-                for (int i = 0; i < GetSize(); i++)
+                for (int i = 0; i < Length; i++)
                 {
                     if (vector.GetComponent(i) != GetComponent(i))
                     {
