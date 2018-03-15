@@ -41,11 +41,6 @@ namespace Shapes
             return radius.ToString();
         }
 
-        //public int CompareTo(Shape shape)
-        //{
-        //    return GetArea().CompareTo(shape.GetArea());
-        //}
-
         private class SortByAreaHelper : IComparer
         {
             int IComparer.Compare(object a, object b)
@@ -96,12 +91,6 @@ namespace Shapes
                 return 0;
             }
         }
-
-        //int IComparable.CompareTo(object obj)
-        //{
-        //    Shape shape = (Shape)obj;
-        //    return string.Compare(GetArea().ToString(), shape.GetArea().ToString());
-        //}
 
         public static IComparer SortByPerimeter()
         {

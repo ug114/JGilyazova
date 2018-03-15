@@ -20,8 +20,8 @@ namespace Shapes
 
             Shape[] array = { firstSquare, secondSquare, firstTriangle, secondTriangle, firstRectangle, secondRectangle, firstCircle, secondCircle };
 
-            //Array.Sort(array, square.SortByArea());
-            //Console.WriteLine(array[array.Length - 1].ToString());
+            Array.Sort(array, Square.SortByArea());
+            Console.WriteLine(array[array.Length - 1].ToString());
 
             Array.Sort(array, Square.SortByPerimeter());
             Console.WriteLine(array[array.Length - 2].ToString());

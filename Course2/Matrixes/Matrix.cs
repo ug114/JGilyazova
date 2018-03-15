@@ -6,7 +6,7 @@ namespace Matrix
 {
     public class Matrix
     {
-        private Vector[] arrayOfRows;
+        private Vector[] rows;
 
         public Matrix(int n, int m)
         {
@@ -20,126 +20,127 @@ namespace Matrix
                 throw new ArgumentException("Количество столбцов матрицы должно быть > 0.");
             }
 
-            arrayOfRows = new Vector[n];
+            rows = new Vector[n];
 
             for (int i = 0; i < n; i++)
             {
-                arrayOfRows[i] = new Vector(m);
+                rows[i] = new Vector(m);
             }
         }
 
         public Matrix(Matrix matrix)
         {
-            arrayOfRows = new Vector[matrix.NumberOfRows];
-                        
-            for (int i = 0; i < matrix.NumberOfRows; i++)
+            rows = new Vector[matrix.rowsNumber];
+
+            for (int i = 0; i < matrix.rowsNumber; i++)
             {
-                arrayOfRows[i] = new Vector(matrix.arrayOfRows[i]);
+                rows[i] = new Vector(matrix.rows[i]);
             }
         }
 
         public Matrix(double[,] array)
         {
-            int numberOfRows = array.GetLength(0);
-            int numberOfColumns = array.GetLength(1);
+            int rowsNumber = array.GetLength(0);
+            int columnsNumber = array.GetLength(1);
 
-            if (numberOfRows <= 0)
+            if (rowsNumber <= 0)
             {
                 throw new ArgumentException("Количество строк матрицы должно быть > 0.");
             }
 
-            if (numberOfColumns <= 0)
+            if (columnsNumber <= 0)
             {
                 throw new ArgumentException("Количество столбцов матрицы должно быть > 0.");
             }
 
-            arrayOfRows = new Vector[numberOfRows];
+            rows = new Vector[rowsNumber];
 
-            for (int i = 0; i < numberOfRows; i++)
+            for (int i = 0; i < rowsNumber; i++)
             {
-                arrayOfRows[i] = new Vector(numberOfColumns);
+                rows[i] = new Vector(columnsNumber);
 
-                for (int j = 0; j < numberOfColumns; j++)
+                for (int j = 0; j < columnsNumber; j++)
                 {
-                    arrayOfRows[i].SetComponent(j, array[i, j]);
+                    rows[i].SetComponent(j, array[i, j]);
                 }
             }
         }
 
         public Matrix(Vector[] array)
         {
-            int numberOfRows = array.GetLength(0);
-            int numberOfColumns = array[0].Length;
+            int rowsNumber = array.GetLength(0);
 
-            if (numberOfRows <= 0)
+            if (rowsNumber <= 0)
             {
-                throw new ArgumentException("Количество строк матрицы должно быть > 0.");
+                throw new ArgumentException("Количество элементов массива должно быть > 0.");
             }
 
-            if (numberOfColumns <= 0)
+            int columnsNumber = array[0].Length;
+
+            if (columnsNumber <= 0)
             {
-                throw new ArgumentException("Количество столбцов матрицы должно быть > 0.");
+                throw new ArgumentException("Размерность векторов должна быть > 0.");
             }
 
-            for (int i = 0; i < numberOfRows; i++)
+            for (int i = 0; i < rowsNumber; i++)
             {
-                if (numberOfColumns < array[i].Length)
+                if (columnsNumber < array[i].Length)
                 {
-                    numberOfColumns = array[i].Length;
+                    columnsNumber = array[i].Length;
                 }
             }
-            
-            arrayOfRows = new Vector[numberOfRows];
 
-            for (int i = 0; i < numberOfRows; i++)
+            rows = new Vector[rowsNumber];
+
+            for (int i = 0; i < rowsNumber; i++)
             {
-                arrayOfRows[i] = new Vector(numberOfColumns);
-                
+                rows[i] = new Vector(columnsNumber);
+
                 for (int j = 0; j < array[i].Length; j++)
                 {
-                    arrayOfRows[i].SetComponent(j, array[i].GetComponent(j));
+                    rows[i].SetComponent(j, array[i].GetComponent(j));
                 }
             }
         }
 
-        public int NumberOfRows
+        public int rowsNumber
         {
             get
             {
-                return arrayOfRows.GetLength(0);
+                return rows.Length;
             }
         }
 
-        public int NumberOfColumns
+        public int columnsNumber
         {
             get
             {
-                return arrayOfRows[0].Length;
+                return rows[0].Length;
             }
         }
 
-        public Vector GetRow(int numberOfRow)
+        public Vector GetRow(int rowNumber)
         {
-            return new Vector(arrayOfRows[numberOfRow]);
+            return new Vector(rows[rowNumber]);
         }
 
-        public void SetRow(int numberOfRow, Vector inputVector)
+        public void SetRow(int rowNumber, Vector inputVector)
         {
-            if (numberOfRow < 0 || numberOfRow >= NumberOfRows)
+            if (rowNumber < 0 || rowNumber >= rowsNumber)
             {
                 throw new ArgumentException("Неверный номер строки.");
             }
 
-            arrayOfRows[numberOfRow] = new Vector(inputVector);
+            rows[rowNumber] = new Vector(inputVector);
         }
 
-        public Vector GetColumn(int numberOfColumn)
+        public Vector GetColumn(int columnNumber)
         {
-            Vector column = new Vector(NumberOfRows);
-            
-            for (int i = 0; i < NumberOfRows; i++)
+            Vector column = new Vector(rowsNumber);
+
+            for (int i = 0; i < rowsNumber; i++)
             {
-                column.SetComponent(i, arrayOfRows[i].GetComponent(numberOfColumn));
+                column.SetComponent(i, rows[i].GetComponent(columnNumber));
             }
 
             return column;
@@ -147,65 +148,21 @@ namespace Matrix
 
         public Matrix Transpose()
         {
-            int oldNumberOfColumns = NumberOfColumns;
-            int oldNumberOfRows = NumberOfRows;
+            Matrix matrix = new Matrix(this);
 
-            if (NumberOfRows > NumberOfColumns)
+            if (columnsNumber > rowsNumber)
             {
-                for (int i = 0; i < NumberOfRows; i++)
-                {
-                    double[] components = new double[NumberOfRows];
+                Array.Resize(ref rows, columnsNumber);
+            }
 
-                    for (int j = 0; j < oldNumberOfColumns; j++)
-                    {
-                        components[j] = arrayOfRows[i].GetComponent(j);
-                    }
-
-                    arrayOfRows[i] = new Vector(NumberOfRows, components);
-                }   
+            if (columnsNumber < rowsNumber)
+            {
+                Array.Resize(ref rows, columnsNumber);
             }
             
-            if (NumberOfRows < NumberOfColumns)
+            for (int i = 0; i < rowsNumber; i++)
             {
-                Array.Resize(ref arrayOfRows, NumberOfColumns);
-                
-                for (int i = 0; i < NumberOfRows - oldNumberOfRows; i++)
-                {
-                    arrayOfRows[oldNumberOfRows + i] = new Vector(NumberOfColumns);
-                }
-            }
-
-            for (int i = 0; i < NumberOfRows; i++)
-            {
-                for (int j = 0; j < NumberOfColumns; j++)
-                {
-                    if (j > i)
-                    {
-                        double temp = arrayOfRows[i].GetComponent(j);
-                        arrayOfRows[i].SetComponent(j, arrayOfRows[j].GetComponent(i));
-                        arrayOfRows[j].SetComponent(i, temp);
-                    }
-                }
-            }
-
-            if (oldNumberOfRows < NumberOfRows)
-            {
-                for (int i = 0; i < NumberOfRows; i++)
-                {
-                    double[] components = new double[NumberOfRows];
-
-                    for (int j = 0; j < oldNumberOfColumns; j++)
-                    {
-                        components[j] = arrayOfRows[i].GetComponent(j);
-                    }
-
-                    arrayOfRows[i] = new Vector(oldNumberOfRows, components);
-                }
-            }
-
-            if (oldNumberOfColumns < NumberOfColumns)
-            {
-                Array.Resize(ref arrayOfRows, oldNumberOfColumns);
+                SetRow(i, matrix.GetColumn(i));
             }
 
             return this;
@@ -213,7 +170,7 @@ namespace Matrix
 
         public Matrix MultiplyByScalar(double scalar)
         {
-            foreach (Vector vector in arrayOfRows)
+            foreach (Vector vector in rows)
             {
                 vector.MultiplyByScalar(scalar);
             }
@@ -224,12 +181,12 @@ namespace Matrix
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder("{ ");
-            
-            for (int i = 0; i < NumberOfRows; i++)
+
+            for (int i = 0; i < rowsNumber; i++)
             {
-                builder.Append(arrayOfRows[i].ToString());
-                    
-                if (i != NumberOfRows - 1)
+                builder.Append(rows[i].ToString());
+
+                if (i != rowsNumber - 1)
                 {
                     builder.Append(", ");
                 }
@@ -240,16 +197,16 @@ namespace Matrix
 
         public Vector MultiplyByVector(Vector vector)
         {
-            if (NumberOfColumns != vector.Length)
+            if (columnsNumber != vector.Length)
             {
                 throw new ArgumentException("Количество столбцов матрицы должно быть равно размерности вектора.");
             }
 
-            Vector outputVector = new Vector(NumberOfRows);
+            Vector outputVector = new Vector(rowsNumber);
 
-            for (int i = 0; i < NumberOfRows; i++)
+            for (int i = 0; i < rowsNumber; i++)
             {
-                double sum = Vector.GetScalarMultiplication(arrayOfRows[i], vector);
+                double sum = Vector.GetScalarMultiplication(rows[i], vector);
                 outputVector.SetComponent(i, sum);
             }
 
@@ -258,19 +215,19 @@ namespace Matrix
 
         public Matrix GetSum(Matrix inputMatrix)
         {
-            if (NumberOfRows != inputMatrix.NumberOfRows)
+            if (rowsNumber != inputMatrix.rowsNumber)
             {
                 throw new ArgumentException("Количество строк первой матрицы должно быть равно количеству строк второй матрицы.");
             }
 
-            if (NumberOfColumns != inputMatrix.NumberOfColumns)
+            if (columnsNumber != inputMatrix.columnsNumber)
             {
                 throw new ArgumentException("Количество столбцов первой матрицы должно быть равно количеству столбцов второй матрицы.");
             }
 
-            for (int i = 0; i < NumberOfRows; i++)
+            for (int i = 0; i < rowsNumber; i++)
             {
-                arrayOfRows[i].GetSum(inputMatrix.arrayOfRows[i]);
+                rows[i].GetSum(inputMatrix.rows[i]);
             }
 
             return this;
@@ -278,19 +235,19 @@ namespace Matrix
 
         public Matrix GetDifference(Matrix inputMatrix)
         {
-            if (NumberOfRows != inputMatrix.NumberOfRows)
+            if (rowsNumber != inputMatrix.rowsNumber)
             {
                 throw new ArgumentException("Количество строк первой матрицы должно быть равно количеству строк второй матрицы.");
             }
 
-            if (NumberOfColumns != inputMatrix.NumberOfColumns)
+            if (columnsNumber != inputMatrix.columnsNumber)
             {
                 throw new ArgumentException("Количество столбцов первой матрицы должно быть равно количеству столбцов второй матрицы.");
             }
 
-            for (int i = 0; i < NumberOfRows; i++)
+            for (int i = 0; i < rowsNumber; i++)
             {
-                arrayOfRows[i].GetDifference(inputMatrix.arrayOfRows[i]);
+                rows[i].GetDifference(inputMatrix.rows[i]);
             }
 
             return this;
@@ -298,22 +255,22 @@ namespace Matrix
 
         public double GetDeterminant()
         {
-            if (NumberOfColumns != NumberOfRows)
+            if (columnsNumber != rowsNumber)
             {
                 throw new ArgumentException("Количество строк матрицы должны быть равно количеству столбцов.");
             }
 
             int tempIndex = 0;
-            int numberOfChanges = 0;
-            int numberOfStep = 0;
+            int changesNumber = 0;
+            int stepNumber = 0;
 
-            while (numberOfStep != NumberOfRows - 1)
+            while (stepNumber != rowsNumber - 1)
             {
                 bool firstIsNull = true;
 
-                for (int i = numberOfStep; i < NumberOfRows; i++)
+                for (int i = stepNumber; i < rowsNumber; i++)
                 {
-                    if (arrayOfRows[i].GetComponent(numberOfStep) != 0)
+                    if (rows[i].GetComponent(stepNumber) != 0)
                     {
                         firstIsNull = false;
                         tempIndex = i;
@@ -327,50 +284,50 @@ namespace Matrix
                 }
                 else
                 {
-                    if (tempIndex != numberOfStep)
+                    if (tempIndex != stepNumber)
                     {
-                        for (int i = numberOfStep; i < NumberOfRows; i++)
+                        for (int i = stepNumber; i < rowsNumber; i++)
                         {
-                            double temp = arrayOfRows[tempIndex].GetComponent(i);
-                            arrayOfRows[tempIndex].SetComponent(i, arrayOfRows[numberOfStep].GetComponent(i));
-                            arrayOfRows[numberOfStep].SetComponent(i, temp);
+                            double temp = rows[tempIndex].GetComponent(i);
+                            rows[tempIndex].SetComponent(i, rows[stepNumber].GetComponent(i));
+                            rows[stepNumber].SetComponent(i, temp);
                         }
 
-                        numberOfChanges++;
+                        changesNumber++;
                     }
 
-                    for (int i = numberOfStep + 1; i < NumberOfRows; i++)
+                    for (int i = stepNumber + 1; i < rowsNumber; i++)
                     {
-                        double coefficient = arrayOfRows[i].GetComponent(numberOfStep) / arrayOfRows[numberOfStep].GetComponent(numberOfStep);
+                        double coefficient = rows[i].GetComponent(stepNumber) / rows[stepNumber].GetComponent(stepNumber);
 
-                        for (int j = numberOfStep; j < NumberOfRows; j++)
+                        for (int j = stepNumber; j < rowsNumber; j++)
                         {
-                            arrayOfRows[i].SetComponent(j, arrayOfRows[i].GetComponent(j) - arrayOfRows[numberOfStep].GetComponent(j) * coefficient);
+                            rows[i].SetComponent(j, rows[i].GetComponent(j) - rows[stepNumber].GetComponent(j) * coefficient);
                         }
                     }
                 }
 
-                numberOfStep++;
+                stepNumber++;
             }
 
-            double det = arrayOfRows[0].GetComponent(0);
+            double det = rows[0].GetComponent(0);
 
-            for (int i = 1; i < NumberOfRows; i++)
+            for (int i = 1; i < rowsNumber; i++)
             {
-                det *= arrayOfRows[i].GetComponent(i);
+                det *= rows[i].GetComponent(i);
             }
 
-            return det * Math.Pow(-1, numberOfChanges);
+            return det * Math.Pow(-1, changesNumber);
         }
 
         public static Matrix GetSum(Matrix matrix1, Matrix matrix2)
         {
-            if (matrix1.NumberOfRows != matrix2.NumberOfRows)
+            if (matrix1.rowsNumber != matrix2.rowsNumber)
             {
                 throw new ArgumentException("Количество строк первой матрицы должно быть равно количеству строк второй матрицы.");
             }
 
-            if (matrix1.NumberOfColumns != matrix2.NumberOfColumns)
+            if (matrix1.columnsNumber != matrix2.columnsNumber)
             {
                 throw new ArgumentException("Количество столбцов первой матрицы должно быть равно количеству столбцов второй матрицы.");
             }
@@ -380,12 +337,12 @@ namespace Matrix
 
         public static Matrix GetDifference(Matrix matrix1, Matrix matrix2)
         {
-            if (matrix1.NumberOfRows != matrix2.NumberOfRows)
+            if (matrix1.rowsNumber != matrix2.rowsNumber)
             {
                 throw new ArgumentException("Количество строк первой матрицы должно быть равно количеству строк второй матрицы.");
             }
 
-            if (matrix1.NumberOfColumns != matrix2.NumberOfColumns)
+            if (matrix1.columnsNumber != matrix2.columnsNumber)
             {
                 throw new ArgumentException("Количество столбцов первой матрицы должно быть равно количеству столбцов второй матрицы.");
             }
@@ -395,19 +352,19 @@ namespace Matrix
 
         public static Matrix GetMultiplication(Matrix matrix1, Matrix matrix2)
         {
-            if (matrix1.NumberOfColumns != matrix2.NumberOfRows)
+            if (matrix1.columnsNumber != matrix2.rowsNumber)
             {
                 throw new ArgumentException("Количество столбцов первой матрицы должно быть равно количеству строк второй матрицы.");
             }
 
-            Matrix outputMatrix = new Matrix(matrix1.NumberOfRows, matrix2.NumberOfColumns);
-            
-            for (int i = 0; i < matrix1.NumberOfRows; i++)
+            Matrix outputMatrix = new Matrix(matrix1.rowsNumber, matrix2.columnsNumber);
+
+            for (int i = 0; i < matrix1.rowsNumber; i++)
             {
-                for (int j = 0; j < matrix2.NumberOfColumns; j++)
+                for (int j = 0; j < matrix2.columnsNumber; j++)
                 {
-                    double sum = Vector.GetScalarMultiplication(matrix1.arrayOfRows[i], matrix2.GetColumn(j));
-                    outputMatrix.arrayOfRows[i].SetComponent(j, sum);
+                    double sum = Vector.GetScalarMultiplication(matrix1.rows[i], matrix2.GetColumn(j));
+                    outputMatrix.rows[i].SetComponent(j, sum);
                 }
             }
 

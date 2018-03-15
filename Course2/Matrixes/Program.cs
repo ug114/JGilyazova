@@ -18,9 +18,9 @@ namespace Matrix
             {
                 matrix1 = new Matrix(new double[,] { { 1, 2 }, { 2, 5 } });
                 matrix2 = new Matrix(matrix1);
-                matrix3 = new Matrix(new double[,] { { 1, 2 }, { 5, 6 } });
+                matrix3 = new Matrix(new double[,] { { 1, 2 }, { 0, 4 } });
 
-                v1 = new Vector(new double[] { 1, 8 });
+                v1 = new Vector(new double[] { 1, 2 });
                 v2 = new Vector(new double[] { 2, 2 });
                 matrix4 = new Matrix(new Vector[] { v1, v2 });
 
