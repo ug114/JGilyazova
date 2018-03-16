@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Shapes
+namespace Shape
 {
-    public class Triangle : Shape, IComparable
+    public class Triangle : IShape
     {
-        private double x1, x2, x3, y1, y2, y3;
+        private double x1;
+        private double x2;
+        private double x3;
+        private double y1;
+        private double y2;
+        private double y3;
 
         public Triangle(double x1, double x2, double x3, double y1, double y2, double y3)
         {
@@ -24,6 +24,11 @@ namespace Shapes
         public double GetWidth()
         {
             return Math.Max(Math.Max(x1, x2), x3) - Math.Min(Math.Min(x1, x2), x3);
+        }
+
+        public double GetSideLength(double x1, double x2, double y1, double y2)
+        {
+            return Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2));
         }
 
         public double GetHeight()
@@ -41,81 +46,27 @@ namespace Shapes
             }
             else
             {
-                double a = Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2));
-                double b = Math.Sqrt(Math.Pow(x3 - x1, 2) + Math.Pow(y3 - y1, 2));
-                double c = Math.Sqrt(Math.Pow(x2 - x3, 2) + Math.Pow(y2 - y3, 2));
-                double p = (a + b + c) / 2;
+                double a = GetSideLength(x1, x2, y1, y2);
+                double b = GetSideLength(x1, x3, y1, y3);
+                double c = GetSideLength(x2, x3, y2, y3);
+                double p = GetPerimeter() / 2;
+
                 return Math.Sqrt(p * (p - a) * (p - b) * (p - c));
             }
         }
 
         public double GetPerimeter()
         {
-            double a = Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2));
-            double b = Math.Sqrt(Math.Pow(x3 - x1, 2) + Math.Pow(y3 - y1, 2));
-            double c = Math.Sqrt(Math.Pow(x2 - x3, 2) + Math.Pow(y2 - y3, 2));
+            double a = GetSideLength(x1, x2, y1, y2);
+            double b = GetSideLength(x1, x3, y1, y3);
+            double c = GetSideLength(x2, x3, y2, y3);
+
             return a + b + c;
         }
 
         public override string ToString()
         {
-            return "((" + x1 + ", " + y1 + "), (" + x2 + ", " + y2 + "), (" + x3 + ", " + y3 + "))";
-        }
-
-        private class SortByAreaHelper : IComparer
-        {
-            int IComparer.Compare(object a, object b)
-            {
-                Shape shape1 = (Shape)a;
-                Shape shape2 = (Shape)b;
-
-                if (shape1.GetArea() > shape2.GetArea())
-                {
-                    return 1;
-                }
-                if (shape1.GetArea() < shape2.GetArea())
-                {
-                    return -1;
-                }
-
-                return 0;
-            }
-        }
-
-        int IComparable.CompareTo(object obj)
-        {
-            Shape shape = (Shape)obj;
-            return string.Compare(GetArea().ToString(), shape.GetArea().ToString());
-        }
-
-        public static IComparer SortByArea()
-        {
-            return new SortByAreaHelper();
-        }
-
-        private class SortByPerimeterHelper : IComparer
-        {
-            int IComparer.Compare(object a, object b)
-            {
-                Shape shape1 = (Shape)a;
-                Shape shape2 = (Shape)b;
-
-                if (shape1.GetPerimeter() > shape2.GetPerimeter())
-                {
-                    return 1;
-                }
-                if (shape1.GetPerimeter() < shape2.GetPerimeter())
-                {
-                    return -1;
-                }
-
-                return 0;
-            }
-        }
-
-        public static IComparer SortByPerimeter()
-        {
-            return new SortByPerimeterHelper();
+            return "Треугольник с координатами ((" + x1 + ", " + y1 + "), (" + x2 + ", " + y2 + "), (" + x3 + ", " + y3 + ")).";
         }
 
         public override bool Equals(object obj)
@@ -140,12 +91,12 @@ namespace Shapes
             int prime = 7;
             int hash = 1;
 
-            hash = prime * hash + (int)x1;
-            hash = prime * hash + (int)x2;
-            hash = prime * hash + (int)x3;
-            hash = prime * hash + (int)y1;
-            hash = prime * hash + (int)y2;
-            hash = prime * hash + (int)y3;
+            hash = prime * hash + x1.GetHashCode();
+            hash = prime * hash + x2.GetHashCode();
+            hash = prime * hash + x3.GetHashCode();
+            hash = prime * hash + y1.GetHashCode();
+            hash = prime * hash + y2.GetHashCode();
+            hash = prime * hash + y3.GetHashCode();
 
             return hash;
         }

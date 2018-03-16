@@ -1,9 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace Shapes
+namespace Shape
 {
     class Program
     {
+        public static IComparer<IShape> SortByArea()
+        {
+            return new SortByAreaHelper();
+        }
+
+        public static IComparer<IShape> SortByPerimeter()
+        {
+            return new SortByPerimeterHelper();
+        }
+
         static void Main(string[] args)
         {
             Square firstSquare = new Square(4);
@@ -18,13 +29,13 @@ namespace Shapes
             Circle firstCircle = new Circle(2);
             Circle secondCircle = new Circle(8);
 
-            Shape[] array = { firstSquare, secondSquare, firstTriangle, secondTriangle, firstRectangle, secondRectangle, firstCircle, secondCircle };
+            IShape[] array = { firstSquare, secondSquare, firstTriangle, secondTriangle, firstRectangle, secondRectangle, firstCircle, secondCircle };
 
-            Array.Sort(array, Square.SortByArea());
-            Console.WriteLine("Фигура с наибольшей площадью: {0}, {1}.", array[array.Length - 1].GetType(), array[array.Length - 1].ToString());
+            Array.Sort(array, SortByArea());
+            Console.WriteLine("Фигура с наибольшей площадью: {0}", array[array.Length - 1].ToString());
 
-            Array.Sort(array, Square.SortByPerimeter());
-            Console.WriteLine("Фигура со вторым по величине периметром: {0}, {1}.", array[array.Length - 2].GetType(), array[array.Length - 2].ToString());
+            Array.Sort(array, SortByPerimeter());
+            Console.WriteLine("Фигура со вторым по величине периметром: {0}", array[array.Length - 2].ToString());
         }
     }
 }

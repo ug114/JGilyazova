@@ -180,7 +180,7 @@ namespace Vectors
 
             foreach (double component in components)
             {
-                hash = prime * hash + (int)component;
+                hash = prime * hash + component.GetHashCode();
             }
 
             return hash;

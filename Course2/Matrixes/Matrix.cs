@@ -152,10 +152,12 @@ namespace Matrix
             
             for (int i = 0; i < ColumnsNumber; i++)
             {
-                array[i] = new Vector(GetColumn(i));
+                array[i] = GetColumn(i);
             }
 
-            return new Matrix(array);
+            rows = array;
+
+            return this;
         }
 
         public Matrix MultiplyByScalar(double scalar)

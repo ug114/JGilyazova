@@ -32,6 +32,8 @@ namespace Matrix
                 Console.WriteLine("Сумма матриц {0} и {1} равна {2}.\n", matrix4.ToString(), matrix1.ToString(), matrix1.GetSum(matrix4).ToString());
                 Console.WriteLine("Результат умножения матрицы {0} на вектор {1} равен {2}.\n", matrix4.ToString(), v1.ToString(), matrix4.MultiplyByVector(v1).ToString());
             }
+
+            
             catch(ArgumentException e)
             {
                 Console.WriteLine(e.Message);

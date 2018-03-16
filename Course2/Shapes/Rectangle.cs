@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Shapes
+namespace Shape
 {
-    public class Rectangle : Shape, IComparable
+    public class Rectangle : IShape
     {
         private double height;
         private double width;
@@ -40,65 +35,9 @@ namespace Shapes
 
         public override string ToString()
         {
-            return height + ", " + width;
+            return "Прямоугольник со сторонами " + height + ", " + width + ".";
         }
-
-        private class SortByAreaHelper : IComparer
-        {
-            int IComparer.Compare(object a, object b)
-            {
-                Shape shape1 = (Shape)a;
-                Shape shape2 = (Shape)b;
-
-                if (shape1.GetArea() > shape2.GetArea())
-                {
-                    return 1;
-                }
-                if (shape1.GetArea() < shape2.GetArea())
-                {
-                    return -1;
-                }
-
-                return 0;
-            }
-        }
-
-        int IComparable.CompareTo(object obj)
-        {
-            Shape shape = (Shape)obj;
-            return string.Compare(GetArea().ToString(), shape.GetArea().ToString());
-        }
-
-        public static IComparer SortByArea()
-        {
-            return new SortByAreaHelper();
-        }
-
-        private class SortByPerimeterHelper : IComparer
-        {
-            int IComparer.Compare(object a, object b)
-            {
-                Shape shape1 = (Shape)a;
-                Shape shape2 = (Shape)b;
-
-                if (shape1.GetPerimeter() > shape2.GetPerimeter())
-                {
-                    return 1;
-                }
-                if (shape1.GetPerimeter() < shape2.GetPerimeter())
-                {
-                    return -1;
-                }
-
-                return 0;
-            }
-        }
-
-        public static IComparer SortByPerimeter()
-        {
-            return new SortByPerimeterHelper();
-        }
-
+        
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(obj, this))
@@ -121,8 +60,8 @@ namespace Shapes
             int prime = 17;
             int hash = 1;
 
-            hash = prime * hash + (int)height;
-            hash = prime * hash + (int)width;
+            hash = prime * hash + height.GetHashCode();
+            hash = prime * hash + width.GetHashCode();
 
             return hash;
         }

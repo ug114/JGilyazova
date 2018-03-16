@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Shapes
+﻿namespace Shape
 {
-    public class Square : Shape, IComparable
+    public class Square : IShape
     {
         private double sideLength;
 
@@ -38,65 +31,9 @@ namespace Shapes
 
         public override string ToString()
         {
-            return sideLength.ToString();
+            return "Квадрат со стороной " + sideLength.ToString() + ".";
         }
-
-        private class SortByAreaHelper : IComparer
-        {
-            int IComparer.Compare(object a, object b)
-            {
-                Shape shape1 = (Shape)a;
-                Shape shape2 = (Shape)b;
-
-                if (shape1.GetArea() > shape2.GetArea())
-                {
-                    return 1;
-                }
-                if (shape1.GetArea() < shape2.GetArea())
-                {
-                    return -1;
-                }
-
-                return 0;
-            }
-        }
-
-        int IComparable.CompareTo(object obj)
-        {
-            Shape shape = (Shape)obj;
-            return string.Compare(GetArea().ToString(), shape.GetArea().ToString());
-        }
-
-        public static IComparer SortByArea()
-        {
-            return new SortByAreaHelper();
-        }
-
-        private class SortByPerimeterHelper : IComparer
-        {
-            int IComparer.Compare(object a, object b)
-            {
-                Shape shape1 = (Shape)a;
-                Shape shape2 = (Shape)b;
-
-                if (shape1.GetPerimeter() > shape2.GetPerimeter())
-                {
-                    return 1;
-                }
-                if (shape1.GetPerimeter() < shape2.GetPerimeter())
-                {
-                    return -1;
-                }
-
-                return 0;
-            }
-        }
-
-        public static IComparer SortByPerimeter()
-        {
-            return new SortByPerimeterHelper();
-        }
-
+        
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(obj, this))
@@ -116,7 +53,7 @@ namespace Shapes
 
         public override int GetHashCode()
         {
-            return (int)sideLength;
+            return sideLength.GetHashCode();
         }
     }
 }
