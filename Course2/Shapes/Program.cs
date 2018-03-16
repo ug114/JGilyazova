@@ -21,15 +21,10 @@ namespace Shapes
             Shape[] array = { firstSquare, secondSquare, firstTriangle, secondTriangle, firstRectangle, secondRectangle, firstCircle, secondCircle };
 
             Array.Sort(array, Square.SortByArea());
-            Console.WriteLine(array[array.Length - 1].ToString());
+            Console.WriteLine("Фигура с наибольшей площадью: {0}, {1}.", array[array.Length - 1].GetType(), array[array.Length - 1].ToString());
 
             Array.Sort(array, Square.SortByPerimeter());
-            Console.WriteLine(array[array.Length - 2].ToString());
-
-            //foreach (shape s in array)
-            //{
-            //    Console.WriteLine(s.GetPerimeter());
-            //}
+            Console.WriteLine("Фигура со вторым по величине периметром: {0}, {1}.", array[array.Length - 2].GetType(), array[array.Length - 2].ToString());
         }
     }
 }

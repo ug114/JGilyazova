@@ -113,12 +113,6 @@ namespace Shapes
             }
         }
 
-        //int IComparable.CompareTo(object obj)
-        //{
-        //    Shape shape = (Shape)obj;
-        //    return string.Compare(GetArea().ToString(), shape.GetArea().ToString());
-        //}
-
         public static IComparer SortByPerimeter()
         {
             return new SortByPerimeterHelper();

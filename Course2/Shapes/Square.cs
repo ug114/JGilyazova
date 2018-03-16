@@ -9,42 +9,37 @@ namespace Shapes
 {
     public class Square : Shape, IComparable
     {
-        private double lengthOfSide;
+        private double sideLength;
 
-        public Square(double lengthOfSide)
+        public Square(double sideLength)
         {
-            this.lengthOfSide = lengthOfSide;
+            this.sideLength = sideLength;
         }
 
         public double GetWidth()
         {
-            return lengthOfSide;
+            return sideLength;
         }
 
         public double GetHeight()
         {
-            return lengthOfSide;
+            return sideLength;
         }
 
         public double GetArea()
         {
-            return lengthOfSide * lengthOfSide;
+            return sideLength * sideLength;
         }
 
         public double GetPerimeter()
         {
-            return lengthOfSide * 4;
+            return sideLength * 4;
         }
 
         public override string ToString()
         {
-            return lengthOfSide.ToString();
+            return sideLength.ToString();
         }
-
-        //public int CompareTo(Shape shape)
-        //{
-        //    return GetArea().CompareTo(shape.GetArea());
-        //}
 
         private class SortByAreaHelper : IComparer
         {
@@ -97,12 +92,6 @@ namespace Shapes
             }
         }
 
-        //int IComparable.CompareTo(object obj)
-        //{
-        //    Shape shape = (Shape)obj;
-        //    return string.Compare(GetArea().ToString(), shape.GetArea().ToString());
-        //}
-
         public static IComparer SortByPerimeter()
         {
             return new SortByPerimeterHelper();
@@ -122,12 +111,12 @@ namespace Shapes
 
             Square square = (Square)obj;
             
-            return square.lengthOfSide == lengthOfSide;
+            return square.sideLength == sideLength;
         }
 
         public override int GetHashCode()
         {
-            return (int)lengthOfSide;
+            return (int)sideLength;
         }
     }
 }
