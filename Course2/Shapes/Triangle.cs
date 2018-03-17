@@ -26,7 +26,7 @@ namespace Shape
             return Math.Max(Math.Max(x1, x2), x3) - Math.Min(Math.Min(x1, x2), x3);
         }
 
-        public double GetSideLength(double x1, double x2, double y1, double y2)
+        public static double GetSideLength(double x1, double x2, double y1, double y2)
         {
             return Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2));
         }

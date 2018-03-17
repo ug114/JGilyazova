@@ -2,9 +2,9 @@
 
 namespace Shape
 {
-    public class SortByPerimeterHelper : IComparer<IShape>
+    public class SortByPerimeterComparer : IComparer<IShape>
     {
-        int IComparer<IShape>.Compare(IShape shape1, IShape shape2)
+        public int Compare(IShape shape1, IShape shape2)
         {
             return shape1.GetPerimeter().CompareTo(shape2.GetPerimeter());
         }
