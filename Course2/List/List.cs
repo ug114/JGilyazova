@@ -1,46 +1,53 @@
-﻿namespace List
+﻿using System;
+
+namespace List
 {
     public class List<T>
     {
         private Node<T> head;
 
-        public int Count()
-        {
-            int count = 0;
-
-            for (Node<T> node = head; node != null; node = node.Next)
-            {
-                count++;
-            }
-
-            return count;
-        }
+        public int Count { get; set; }
 
         public T GetFirstNodeData()
         {
+            if (head == null)
+            {
+                throw new ArgumentException("Список пустой. Невозможно получить данные о значении первого узла.");
+            }
+
             return head.Data;
+        }
+
+        public Node<T> GetNodeAt(int index)
+        {
+            Node<T> node = head;
+
+            for (int i = 0; i < index; i++)
+            {
+                node = node.Next;
+            }
+
+            return node;
         }
 
         public T GetData(int index)
         {
-            Node<T> node = head;
-
-            for (int i = 0; i < index; i++)
+            if (index < 0 || index >= Count)
             {
-                node = node.Next;
+                throw new ArgumentException("В списке нет узла с таким индексом.");
             }
 
-            return node.Data;
+            return GetNodeAt(index).Data;
         }
 
-        public T Insert(int index, T newData)
+        public T SetData(int index, T newData)
         {
-            Node<T> node = head;
-
-            for (int i = 0; i < index; i++)
+            if (index < 0 || index >= Count)
             {
-                node = node.Next;
+                throw new ArgumentException("В списке нет узла с таким индексом.");
             }
+
+            Node<T> node = GetNodeAt(index);
 
             T oldData = node.Data;
             node.Data = newData;
@@ -50,15 +57,14 @@
 
         public T RemoveAt(int index)
         {
-            Node<T> current = head;
-            Node<T> previous = null;
-
-            for (int i = 0; i < index; i++)
+            if (index <= 0 || index >= Count)
             {
-                previous = current;
-                current = current.Next;
+                throw new ArgumentException("В списке нет узла с таким индексом.");
             }
 
+            Node<T> previous = GetNodeAt(index - 1);
+            Node<T> current = previous.Next;
+                        
             T oldData = current.Data;
 
             if (previous != null)
@@ -70,6 +76,8 @@
                 head = head.Next;
             }
 
+            Count--;
+
             return oldData;
         }
 
@@ -78,7 +86,7 @@
             Node<T> current = head;
             Node<T> previous = null;
 
-            while (!current.Data.Equals(data))
+            while (current.Data == null || !current.Data.Equals(data))
             {
                 previous = current;
                 current = current.Next;
@@ -98,6 +106,8 @@
                 head = head.Next;
             }
 
+            Count--;
+
             return true;
         }
 
@@ -105,41 +115,44 @@
         {
             if (head == null)
             {
-                return default(T);
+                throw new ArgumentException("Список пустой. Невозможно удалить первый узел.");
             }
 
             T data = GetFirstNodeData();
             head = head.Next;
+            Count--;
 
             return data;
         }
 
-        public void SetFirst(T data)
+        public void AddFirst(T data)
         {
             Node<T> node = new Node<T>(data, head);
             head = node;
+            Count++;
         }
 
-        public void InsertNode(int index, Node<T> node)
+        public void Insert(int index, T data)
         {
+            if (index < 0 || index > Count)
+            {
+                throw new ArgumentException("Невозможно вставить в список узел с таким индексом.");
+            }
+
             if (index == 0)
             {
-                SetFirst(node.Data);
+                AddFirst(data);
             }
             else
             {
-                Node<T> previous = null;
-                Node<T> next = head;
-                
-                for (int i = 0; i < index; i++)
-                {
-                    previous = next;
-                    next = next.Next;
-                }
+                Node<T> previous = GetNodeAt(index - 1);
+                Node<T> next = previous.Next;
 
+                Node<T> node = new Node<T>(data, next);
                 previous.Next = node;
-                node.Next = next;
             }
+
+            Count++;
         }
 
         public List<T> CopyTo()
@@ -153,6 +166,8 @@
                 node = node.Next;
             }
 
+            newList.Count = Count;
+
             return newList;
         }
 
@@ -165,11 +180,10 @@
 
             Node<T> previous = null;
             Node<T> current = head;
-            Node<T> next = null;
-
+            
             while (current.Next != null)
             {
-                next = current.Next;
+                Node<T> next = current.Next;
                 current.Next = previous;
                 previous = current;
                 current = next;
@@ -191,15 +205,11 @@
             }
             else
             {
-                Node<T> current = head;
-
-                while (current.Next != null)
-                {
-                    current = current.Next;
-                }
-
+                Node<T> current = GetNodeAt(Count - 1);
                 current.Next = node;
             }
+
+            Count++;
         }
     }
 }
