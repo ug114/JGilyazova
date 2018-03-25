@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace List
 {
@@ -6,19 +7,19 @@ namespace List
     {
         private Node<T> head;
 
-        public int Count { get; set; }
+        public int Count { get; private set; }
 
         public T GetFirstNodeData()
         {
             if (head == null)
             {
-                throw new ArgumentException("Список пустой. Невозможно получить данные о значении первого узла.");
+                throw new ArgumentOutOfRangeException("Список пустой. Невозможно получить данные о значении первого узла.");
             }
 
             return head.Data;
         }
 
-        public Node<T> GetNodeAt(int index)
+        private Node<T> GetNodeAt(int index)
         {
             Node<T> node = head;
 
@@ -34,7 +35,7 @@ namespace List
         {
             if (index < 0 || index >= Count)
             {
-                throw new ArgumentException("В списке нет узла с таким индексом.");
+                throw new ArgumentOutOfRangeException();
             }
 
             return GetNodeAt(index).Data;
@@ -44,7 +45,7 @@ namespace List
         {
             if (index < 0 || index >= Count)
             {
-                throw new ArgumentException("В списке нет узла с таким индексом.");
+                throw new ArgumentOutOfRangeException();
             }
 
             Node<T> node = GetNodeAt(index);
@@ -57,65 +58,66 @@ namespace List
 
         public T RemoveAt(int index)
         {
-            if (index <= 0 || index >= Count)
+            if (index < 0 || index >= Count)
             {
-                throw new ArgumentException("В списке нет узла с таким индексом.");
+                throw new ArgumentOutOfRangeException();
             }
 
-            Node<T> previous = GetNodeAt(index - 1);
-            Node<T> current = previous.Next;
-                        
-            T oldData = current.Data;
-
-            if (previous != null)
+            if (index == 0)
             {
-                previous.Next = current.Next;
+                return RemoveFirst();
             }
             else
             {
-                head = head.Next;
+                Node<T> previous = GetNodeAt(index - 1);
+                Node<T> current = previous.Next;
+
+                T oldData = current.Data;
+
+                if (previous != null)
+                {
+                    previous.Next = current.Next;
+                }
+                else
+                {
+                    head = head.Next;
+                }
+
+                Count--;
+
+                return oldData;
             }
-
-            Count--;
-
-            return oldData;
         }
 
         public bool RemoveNode(T data)
         {
-            Node<T> current = head;
-            Node<T> previous = null;
-
-            while (current.Data == null || !current.Data.Equals(data))
+            for (Node<T> current = head, previous = null; current != null; previous = current, current = current.Next)
             {
-                previous = current;
-                current = current.Next;
-
-                if (current.Next == null && !current.Data.Equals(data))
+                if ((data == null && current.Data == null) || current.Data.Equals(data))
                 {
-                    return false;
+                    if (previous != null)
+                    {
+                        previous.Next = current.Next;
+                    }
+                    else
+                    {
+                        head = head.Next;
+                    }
+
+                    Count--;
+
+                    return true;
                 }
             }
 
-            if (previous != null)
-            {
-                previous.Next = current.Next;
-            }
-            else
-            {
-                head = head.Next;
-            }
-
-            Count--;
-
-            return true;
+            return false;
         }
 
         public T RemoveFirst()
         {
             if (head == null)
             {
-                throw new ArgumentException("Список пустой. Невозможно удалить первый узел.");
+                throw new ArgumentOutOfRangeException("Список пустой. Невозможно удалить первый узел.");
             }
 
             T data = GetFirstNodeData();
@@ -136,7 +138,7 @@ namespace List
         {
             if (index < 0 || index > Count)
             {
-                throw new ArgumentException("Невозможно вставить в список узел с таким индексом.");
+                throw new ArgumentOutOfRangeException();
             }
 
             if (index == 0)
@@ -150,24 +152,33 @@ namespace List
 
                 Node<T> node = new Node<T>(data, next);
                 previous.Next = node;
+                Count++;
             }
-
-            Count++;
         }
 
         public List<T> CopyTo()
         {
             List<T> newList = new List<T>();
-            Node<T> node = head;
 
-            while (node != null)
+            if (head == null)
             {
-                newList.Add(node.Data);
+                return newList;
+            }
+                        
+            Node<T> newNode = new Node<T>(head.Data);
+            newList.head = newNode;
+            Node<T> node = head;
+            
+            while (node.Next != null)
+            {
                 node = node.Next;
+                newNode.Next = new Node<T>(node.Data);
+                newNode = newNode.Next;
             }
 
             newList.Count = Count;
-
+            newNode.Next = new Node<T>(node.Data);
+                        
             return newList;
         }
 
@@ -210,6 +221,23 @@ namespace List
             }
 
             Count++;
+        }
+
+        public override string ToString()
+        {
+            if (Count == 0)
+            {
+                return null;
+            }
+
+            StringBuilder builder = new StringBuilder();
+
+            for (int i = 0; i < Count - 1; i++)
+            {
+                builder.Append(GetData(i) + ", ");
+            }
+
+            return builder.Append(GetData(Count - 1)).ToString();
         }
     }
 }
