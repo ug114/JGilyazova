@@ -226,7 +226,8 @@ namespace List
 
             while (node.Next != null)
             {
-                builder.Append(node.Data + ", ");
+                builder.Append(node.Data);
+                builder.Append(", ");
                 node = node.Next;
             }
 
