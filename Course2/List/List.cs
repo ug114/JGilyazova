@@ -35,7 +35,7 @@ namespace List
         {
             if (index < 0 || index >= Count)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException("В списке нет узла с таким индексом. Невозможно получить данные о значении узла.");
             }
 
             return GetNodeAt(index).Data;
@@ -45,7 +45,7 @@ namespace List
         {
             if (index < 0 || index >= Count)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException("В списке нет узла с таким индексом. Невозможно изменить значение узла.");
             }
 
             Node<T> node = GetNodeAt(index);
@@ -60,7 +60,7 @@ namespace List
         {
             if (index < 0 || index >= Count)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException("В списке нет узла с таким индексом. Невозможно удалить узел.");
             }
 
             if (index == 0)
@@ -74,15 +74,7 @@ namespace List
 
                 T oldData = current.Data;
 
-                if (previous != null)
-                {
-                    previous.Next = current.Next;
-                }
-                else
-                {
-                    head = head.Next;
-                }
-
+                previous.Next = current.Next;
                 Count--;
 
                 return oldData;
@@ -93,7 +85,7 @@ namespace List
         {
             for (Node<T> current = head, previous = null; current != null; previous = current, current = current.Next)
             {
-                if ((data == null && current.Data == null) || current.Data.Equals(data))
+                if (Equals(current.Data, data))
                 {
                     if (previous != null)
                     {
@@ -138,7 +130,7 @@ namespace List
         {
             if (index < 0 || index > Count)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException("Невозможно вставить в список узел с таким индексом.");
             }
 
             if (index == 0)
@@ -156,7 +148,7 @@ namespace List
             }
         }
 
-        public List<T> CopyTo()
+        public List<T> Copy()
         {
             List<T> newList = new List<T>();
 
@@ -169,7 +161,7 @@ namespace List
             newList.head = newNode;
             Node<T> node = head;
             
-            while (node.Next != null)
+            for (int i = 0; i < Count - 1; i++)
             {
                 node = node.Next;
                 newNode.Next = new Node<T>(node.Data);
@@ -177,8 +169,7 @@ namespace List
             }
 
             newList.Count = Count;
-            newNode.Next = new Node<T>(node.Data);
-                        
+            
             return newList;
         }
 
@@ -227,17 +218,19 @@ namespace List
         {
             if (Count == 0)
             {
-                return null;
+                return "";
             }
 
             StringBuilder builder = new StringBuilder();
+            Node<T> node = head;
 
-            for (int i = 0; i < Count - 1; i++)
+            while (node.Next != null)
             {
-                builder.Append(GetData(i) + ", ");
+                builder.Append(node.Data + ", ");
+                node = node.Next;
             }
 
-            return builder.Append(GetData(Count - 1)).ToString();
+            return builder.Append(node.Data).ToString();
         }
     }
 }

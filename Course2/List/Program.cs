@@ -11,10 +11,12 @@ namespace List
             list.Add("2");
             list.Add("3");
             list.Add("4");
+            list.Add(null);
             list.Add("5");
-            list.Add("6");
 
-            List<string> list2 = list.CopyTo();
+            list.RemoveNode(null);
+
+            List<string> list2 = list.Copy();
             list2.Reverse();
 
             Console.WriteLine("Список:");
