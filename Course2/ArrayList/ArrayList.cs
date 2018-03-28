@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ArrayList
 {
-    public class ArrayList<T> //: IList<T>
+    public class ArrayList<T> : IList<T>
     {
         private T[] items = new T[10];
         private int length;
@@ -20,25 +17,63 @@ namespace ArrayList
             }
         }
         
-        public bool IsReadOnly { get; set; }
+        public bool IsReadOnly { get; }
 
         public int IndexOf(T data)
         {
-            return 0;
+            for (int i = 0; i < length; i++)
+            {
+                if (Equals(items[i], data))
+                {
+                    return i;
+                }
+            }
+
+            return -1;
         }
 
         public void Insert(int index, T data)
         {
+            if (index > length || index < 0)
+            {
+                throw new ArgumentOutOfRangeException("Невозможно вставить в список элемент. Индекс выходит за границы списка.");
+            }
+
+            if (IsReadOnly)
+            {
+                throw new NotSupportedException();
+            }
+
+            if (length >= items.Length)
+            {
+                IncreaseCapacity();
+            }
             
+            if (index == length)
+            {                
+                items[length] = data;
+            }
+            else
+            {
+                Array.Copy(items, index, items, index + 1, length - index);
+                items[index] = data;                
+            }
+
+            length++;
         }
 
         public void RemoveAt(int index)
         {
-            if (index < 0 || index >= Count)
+            if (index < 0 || index >= length)
             {
-                throw new IndexOutOfRangeException();
+                throw new ArgumentOutOfRangeException("Невозможно удалить элемент, индекс выходит за границы списка.");
             }
-            
+
+            if (IsReadOnly)
+            {
+                throw new NotSupportedException();
+            }
+
             if (index < length - 1)
             {
                 Array.Copy(items, index + 1, items, index, length - index - 1);
@@ -51,18 +86,18 @@ namespace ArrayList
         {
             get
             {
-                if (index < 0 || index >= Count)
+                if (index < 0 || index >= length)
                 {
-                    throw new IndexOutOfRangeException();
+                    throw new ArgumentOutOfRangeException("Индекс выходит за границы списка.");
                 }
 
                 return items[index];
             }
             set
             {
-                if (index < 0 || index >= Count)
+                if (index < 0 || index >= length)
                 {
-                    throw new IndexOutOfRangeException();
+                    throw new ArgumentOutOfRangeException("Индекс выходит за границы списка.");
                 }
 
                 items[index] = value;
@@ -71,6 +106,11 @@ namespace ArrayList
 
         public void Add(T data)
         {
+            if (IsReadOnly)
+            {
+                throw new NotSupportedException();
+            }
+
             if (length >= items.Length)
             {
                 IncreaseCapacity();
@@ -89,34 +129,72 @@ namespace ArrayList
 
         public void Clear()
         {
-            
+            if (IsReadOnly)
+            {
+                throw new NotSupportedException();
+            }
+
+            for (int i = 0; i < length; i++)
+            {
+                items[i] = default(T);
+            }
+
+            length = 0;
         }
 
         public bool Contains(T data)
         {
-            return true;
+            for (int i = 0; i < length; i++)
+            {
+                if (Equals(items[i], data))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
-        public void CopyTo(T[] array, int number)
+        //TODO: throw exceptions
+        public void CopyTo(T[] array, int arrayIndex)
         {
-            
+            if (arrayIndex < 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            Array.Copy(items, 0, array, arrayIndex, length);
         }
 
         public bool Remove(T data)
         {
-            return true;
+            if (IsReadOnly)
+            {
+                throw new NotSupportedException();
+            }
+
+            for (int i = 0; i < length; i++)
+            {
+                if (Equals(items[i], data))
+                {
+                    Array.Copy(items, i + 1, items, i, length - i - 1);
+                    length--;
+
+                    return true;
+                }
+            }
+                        
+            return false;
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            return null;
+            return ((IList<T>)items).GetEnumerator();
         }
 
-        //public IEnumerable.GetEnumerator()
-        //{
-        //    return null;
-        //}
-
-
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return items.GetEnumerator();
+        }
     }
 }
