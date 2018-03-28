@@ -41,7 +41,7 @@ namespace ArrayList
 
             if (IsReadOnly)
             {
-                throw new NotSupportedException();
+                throw new NotSupportedException("Невозможно изменить список, только для чтения.");
             }
 
             if (length >= items.Length)
@@ -71,7 +71,7 @@ namespace ArrayList
 
             if (IsReadOnly)
             {
-                throw new NotSupportedException();
+                throw new NotSupportedException("Невозможно изменить список, только для чтения.");
             }
 
             if (index < length - 1)
@@ -108,7 +108,7 @@ namespace ArrayList
         {
             if (IsReadOnly)
             {
-                throw new NotSupportedException();
+                throw new NotSupportedException("Невозможно изменить список, только для чтения.");
             }
 
             if (length >= items.Length)
@@ -131,7 +131,7 @@ namespace ArrayList
         {
             if (IsReadOnly)
             {
-                throw new NotSupportedException();
+                throw new NotSupportedException("Невозможно изменить список, только для чтения.");
             }
 
             for (int i = 0; i < length; i++)
@@ -155,12 +155,11 @@ namespace ArrayList
             return false;
         }
 
-        //TODO: throw exceptions
         public void CopyTo(T[] array, int arrayIndex)
         {
             if (arrayIndex < 0)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException("Невозможно скопировать список в массив, индекс < 0.");
             }
 
             Array.Copy(items, 0, array, arrayIndex, length);
@@ -170,7 +169,7 @@ namespace ArrayList
         {
             if (IsReadOnly)
             {
-                throw new NotSupportedException();
+                throw new NotSupportedException("Невозможно изменить список, только для чтения.");
             }
 
             for (int i = 0; i < length; i++)

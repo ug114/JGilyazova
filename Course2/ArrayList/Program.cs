@@ -8,12 +8,17 @@ namespace ArrayList
         {
             ArrayList<string> arrayList = new ArrayList<string>();
 
-            arrayList.Add("1");
-            arrayList.Add("2");
-            arrayList.Add(null);
-
-            //string[] array = new string[5];
-            //Console.WriteLine(arrayList.Remove(null));
+            try
+            {
+                arrayList.Add("1");
+                arrayList.Add("2");
+                arrayList.Add(null);
+                arrayList.Add("4");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }           
 
             foreach (string str in arrayList)
             {
