@@ -6,22 +6,21 @@ namespace ArrayList
 {
     public class ArrayList<T> : IList<T>
     {
-        private T[] items = new T[10];
-        private int length;
+        private T[] items;
+        private int modCount;
 
-        public int Count
-        {
-            get
-            {
-                return length;
-            }
-        }
-        
+        public int Count { get; set; }
+
         public bool IsReadOnly { get; }
+
+        public ArrayList(int capacity)
+        {
+            items = new T[capacity];
+        }
 
         public int IndexOf(T data)
         {
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < Count; i++)
             {
                 if (Equals(items[i], data))
                 {
@@ -34,59 +33,51 @@ namespace ArrayList
 
         public void Insert(int index, T data)
         {
-            if (index > length || index < 0)
+            if (index > Count || index < 0)
             {
                 throw new ArgumentOutOfRangeException("Невозможно вставить в список элемент. Индекс выходит за границы списка.");
             }
 
-            if (IsReadOnly)
-            {
-                throw new NotSupportedException("Невозможно изменить список, только для чтения.");
-            }
-
-            if (length >= items.Length)
+            if (Count >= items.Length)
             {
                 IncreaseCapacity();
             }
             
-            if (index == length)
+            if (index == Count)
             {                
-                items[length] = data;
+                items[Count] = data;
             }
             else
             {
-                Array.Copy(items, index, items, index + 1, length - index);
+                Array.Copy(items, index, items, index + 1, Count - index);
                 items[index] = data;                
             }
 
-            length++;
+            modCount++;
+            Count++;
         }
 
         public void RemoveAt(int index)
         {
-            if (index < 0 || index >= length)
+            if (index < 0 || index >= Count)
             {
                 throw new ArgumentOutOfRangeException("Невозможно удалить элемент, индекс выходит за границы списка.");
             }
-
-            if (IsReadOnly)
+            
+            if (index < Count - 1)
             {
-                throw new NotSupportedException("Невозможно изменить список, только для чтения.");
+                Array.Copy(items, index + 1, items, index, Count - index - 1);
             }
 
-            if (index < length - 1)
-            {
-                Array.Copy(items, index + 1, items, index, length - index - 1);
-            }
-
-            --length; 
+            modCount++;
+            --Count; 
         }
 
         public T this[int index]
         {
             get
             {
-                if (index < 0 || index >= length)
+                if (index < 0 || index >= Count)
                 {
                     throw new ArgumentOutOfRangeException("Индекс выходит за границы списка.");
                 }
@@ -95,7 +86,7 @@ namespace ArrayList
             }
             set
             {
-                if (index < 0 || index >= length)
+                if (index < 0 || index >= Count)
                 {
                     throw new ArgumentOutOfRangeException("Индекс выходит за границы списка.");
                 }
@@ -106,18 +97,14 @@ namespace ArrayList
 
         public void Add(T data)
         {
-            if (IsReadOnly)
-            {
-                throw new NotSupportedException("Невозможно изменить список, только для чтения.");
-            }
-
-            if (length >= items.Length)
+            if (Count >= items.Length)
             {
                 IncreaseCapacity();
             }
 
-            items[length] = data;
-            ++length;
+            items[Count] = data;
+            modCount++;
+            ++Count;
         }
 
         private void IncreaseCapacity()
@@ -129,30 +116,17 @@ namespace ArrayList
 
         public void Clear()
         {
-            if (IsReadOnly)
-            {
-                throw new NotSupportedException("Невозможно изменить список, только для чтения.");
-            }
-
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < Count; i++)
             {
                 items[i] = default(T);
             }
 
-            length = 0;
+            Count = 0;
         }
 
         public bool Contains(T data)
         {
-            for (int i = 0; i < length; i++)
-            {
-                if (Equals(items[i], data))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return IndexOf(data) > -1;
         }
 
         public void CopyTo(T[] array, int arrayIndex)
@@ -162,22 +136,18 @@ namespace ArrayList
                 throw new ArgumentOutOfRangeException("Невозможно скопировать список в массив, индекс < 0.");
             }
 
-            Array.Copy(items, 0, array, arrayIndex, length);
+            Array.Copy(items, 0, array, arrayIndex, Count);
         }
 
         public bool Remove(T data)
         {
-            if (IsReadOnly)
-            {
-                throw new NotSupportedException("Невозможно изменить список, только для чтения.");
-            }
-
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < Count; i++)
             {
                 if (Equals(items[i], data))
                 {
-                    Array.Copy(items, i + 1, items, i, length - i - 1);
-                    length--;
+                    Array.Copy(items, i + 1, items, i, Count - i - 1);
+                    Count--;
+                    modCount++;
 
                     return true;
                 }
@@ -188,12 +158,22 @@ namespace ArrayList
 
         public IEnumerator<T> GetEnumerator()
         {
-            return ((IList<T>)items).GetEnumerator();
+            int oldModCount = modCount;
+
+            for (int i = 0; i < Count; i++)
+            {
+                if (oldModCount != modCount)
+                {
+                    throw new InvalidOperationException("Невозможно показать элементы списка, список был измененен.");
+                }
+
+                yield return items[i];
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return items.GetEnumerator();
+            return GetEnumerator();
         }
     }
 }
