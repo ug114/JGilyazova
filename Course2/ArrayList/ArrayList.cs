@@ -9,9 +9,15 @@ namespace ArrayList
         private T[] items;
         private int modCount;
 
-        public int Count { get; set; }
+        public int Count { get; private set; }
 
-        public bool IsReadOnly { get; }
+        public bool IsReadOnly
+        {
+            get
+            {
+                return false;
+            }
+        }
 
         public ArrayList(int capacity)
         {
@@ -42,15 +48,15 @@ namespace ArrayList
             {
                 IncreaseCapacity();
             }
-            
+
             if (index == Count)
-            {                
+            {
                 items[Count] = data;
             }
             else
             {
                 Array.Copy(items, index, items, index + 1, Count - index);
-                items[index] = data;                
+                items[index] = data;
             }
 
             modCount++;
@@ -63,14 +69,14 @@ namespace ArrayList
             {
                 throw new ArgumentOutOfRangeException("Невозможно удалить элемент, индекс выходит за границы списка.");
             }
-            
+
             if (index < Count - 1)
             {
                 Array.Copy(items, index + 1, items, index, Count - index - 1);
             }
 
             modCount++;
-            --Count; 
+            --Count;
         }
 
         public T this[int index]
@@ -121,6 +127,7 @@ namespace ArrayList
                 items[i] = default(T);
             }
 
+            modCount++;
             Count = 0;
         }
 
@@ -152,7 +159,7 @@ namespace ArrayList
                     return true;
                 }
             }
-                        
+
             return false;
         }
 
