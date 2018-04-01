@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HashTable
 {
@@ -10,7 +7,15 @@ namespace HashTable
     {
         static void Main(string[] args)
         {
+            HashTable<int> hashTable = new HashTable<int>(10);
 
+            hashTable.Add(1);
+            hashTable.Add(2);
+            
+            foreach(int item in hashTable)
+            {
+                Console.WriteLine(item);
+            }
         }
     }
 }

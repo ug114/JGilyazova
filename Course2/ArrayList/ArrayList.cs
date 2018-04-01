@@ -127,7 +127,11 @@ namespace ArrayList
                 items[i] = default(T);
             }
 
-            modCount++;
+            if (Count != 0)
+            {
+                modCount++;
+            }
+
             Count = 0;
         }
 
