@@ -7,12 +7,14 @@ namespace HashTable
     {
         static void Main(string[] args)
         {
-            HashTable<int> hashTable = new HashTable<int>(10);
+            HashTable<string> hashTable = new HashTable<string>(10);
 
-            hashTable.Add(1);
-            hashTable.Add(2);
-            
-            foreach(int item in hashTable)
+            hashTable.Add("1");
+            hashTable.Add("2");
+            hashTable.Add(null);
+            hashTable.Remove(null);
+
+            foreach (string item in hashTable)
             {
                 Console.WriteLine(item);
             }

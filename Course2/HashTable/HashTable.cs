@@ -1,28 +1,20 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 
 namespace HashTable
 {
     class HashTable<T> : ICollection<T>
     {
         private List<T>[] array;
+        private int modCount;
 
         public HashTable(int capacity)
         {
             array = new List<T>[capacity];
         }
 
-        public int Count
-        {
-            get
-            {
-                return array.Length;
-            }
-
-            private set { }
-        }
+        public int Count { get; private set; }
 
         public bool IsReadOnly
         {
@@ -34,32 +26,41 @@ namespace HashTable
 
         public void Add(T item)
         {
-            int index = Math.Abs(item.GetHashCode() % Count);
+            int index = item == null ? 0 : Math.Abs(item.GetHashCode() % array.Length);
 
-            if (Equals(array[index], null))
+            if (ReferenceEquals(array[index], null))
             {
                 array[index] = new List<T>();
             }
-
+            
             array[index].Add(item);
+            Count++;
+            modCount++;
         }
 
         public void Clear()
         {
-            for (int i = 0; i < Count; i++)
+            for (int i = 0; i < array.Length; i++)
             {
-                if (!Equals(array[i], null))
+                if (!ReferenceEquals(array[i], null))
                 {
                     array[i].Clear();
                 }
             }
+
+            if (Count != 0)
+            {
+                modCount++;
+            }
+
+            Count = 0;
         }
 
         public bool Contains(T item)
         {
-            for (int i = 0; i < Count; i++)
+            for (int i = 0; i < array.Length; i++)
             {
-                if (array[i].Contains(item))
+                if (!ReferenceEquals(array[i], null) && array[i].Contains(item))
                 {
                     return true;
                 }
@@ -75,30 +76,41 @@ namespace HashTable
                 throw new ArgumentOutOfRangeException("Невозможно скопировать список в массив, индекс < 0.");
             }
 
+            if (ReferenceEquals(array, null))
+            {
+                throw new ArgumentNullException("Невозможно скопировать список в массив.");
+            }
+
+            if (Count > array.Length - arrayIndex)
+            {
+                throw new ArgumentException("Невозможно скопировать список в массив.");
+            }
+
             int k = arrayIndex;
 
-            for (int i = 0; i < this.array.Length; i++)
+            foreach (var item in this)
             {
-                if (!Equals(this.array[i], null))
-                {
-                    for (int j = 0; j < this.array[i].Count; j++)
-                    {
-                        array[k] = this.array[i][j];
-                        k++;
-                    }
-                }
+                array[k] = item;
+                k++;
             }
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            for (int i = 0; i < Count; i++)
+            int oldModCount = modCount;
+
+            for (int i = 0; i < array.Length; i++)
             {
-                if (!Equals(array[i], null))
+                if (!ReferenceEquals(array[i], null))
                 {
-                    for (int j = 0; j < array[i].Count; j++)
+                    foreach (var item in array[i])
                     {
-                        yield return array[i][j];
+                        if (oldModCount != modCount)
+                        {
+                            throw new InvalidOperationException("Невозможно показать элементы списка, список был измененен.");
+                        }
+
+                        yield return item;
                     }
                 }
             }
@@ -106,9 +118,17 @@ namespace HashTable
 
         public bool Remove(T item)
         {
-            int index = Math.Abs(item.GetHashCode() % array.Length);
+            int index = item == null ? 0 : Math.Abs(item.GetHashCode() % array.Length);
 
-            return array[index].Remove(item);
+            if (!ReferenceEquals(array[index], null) && array[index].Contains(item))
+            {
+                array[index].Remove(item);
+                Count--;
+                modCount++;
+                return true;
+            }
+
+            return false;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
