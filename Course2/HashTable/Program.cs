@@ -12,8 +12,10 @@ namespace HashTable
             hashTable.Add("1");
             hashTable.Add("2");
             hashTable.Add(null);
-            hashTable.Remove(null);
+            hashTable.Remove("2");
 
+            hashTable.Clear();
+            
             foreach (string item in hashTable)
             {
                 Console.WriteLine(item);
