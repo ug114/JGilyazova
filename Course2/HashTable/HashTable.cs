@@ -26,7 +26,7 @@ namespace HashTable
 
         public void Add(T item)
         {
-            int index = GetIndex(item, this);
+            int index = GetIndex(item);
 
             if (ReferenceEquals(array[index], null))
             {
@@ -58,7 +58,7 @@ namespace HashTable
 
         public bool Contains(T item)
         {
-            int index = GetIndex(item, this);
+            int index = GetIndex(item);
 
             if (!ReferenceEquals(array[index], null) && array[index].Contains(item))
             {
@@ -117,7 +117,7 @@ namespace HashTable
 
         public bool Remove(T item)
         {
-            int index = GetIndex(item, this);
+            int index = GetIndex(item);
 
             if (!ReferenceEquals(array[index], null) && array[index].Remove(item))
             {
@@ -134,9 +134,9 @@ namespace HashTable
             return GetEnumerator();
         }
 
-        public static int GetIndex(T item, HashTable<T> hashTable)
+        public int GetIndex(T item)
         {
-            return item == null ? 0 : Math.Abs(item.GetHashCode() % hashTable.array.Length);
+            return item == null ? 0 : Math.Abs(item.GetHashCode() % array.Length);
         }
     }
 }
