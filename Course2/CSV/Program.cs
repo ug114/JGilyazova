@@ -8,7 +8,7 @@ namespace CSV
         static void Print(string outputDocument, string inputDocument)
         {
             FileInfo inputFile = new FileInfo(inputDocument);
-            
+
             if (!inputFile.Exists)
             {
                 throw new FileNotFoundException("CSV file not found.");
@@ -26,15 +26,19 @@ namespace CSV
                     writer.WriteLine("</head>");
                     writer.WriteLine("<body>");
                     writer.WriteLine("<table border=\"1\">");
+
                     string currentLine;
+                    int quotesCount = 0;
+                    bool isInQuotes = false;
 
                     while ((currentLine = reader.ReadLine()) != null)
                     {
-                        writer.WriteLine("<tr>");
-                        writer.Write("<td>");
-                        int quotesCount = 0;
-                        bool isInQuotes = false;
-
+                        if (!isInQuotes)
+                        {
+                            writer.WriteLine("<tr>");
+                            writer.Write("<td>");
+                        }
+                        
                         for (int i = 0; i < currentLine.Length; i++)
                         {
                             if (currentLine[i] != ',' && currentLine[i] != '"' && currentLine[i] != '>' && currentLine[i] != '<' && currentLine[i] != '&')
@@ -49,8 +53,16 @@ namespace CSV
 
                                     if (i < currentLine.Length - 1 && currentLine[i + 1] == '"')
                                     {
-                                        writer.Write('"');
-                                        i++;
+                                        if (isInQuotes)
+                                        {
+                                            writer.Write('"');
+                                            i++;
+                                            quotesCount++;
+                                        }
+                                        else
+                                        {
+                                            writer.Write('"');
+                                        }
                                     }
 
                                     if (quotesCount % 2 == 0)
@@ -84,26 +96,18 @@ namespace CSV
                                     writer.Write("<td>");
                                 }
                             }
-
-                            if (i == currentLine.Length - 1)
-                            {
-                                if (!isInQuotes)
-                                {
-                                    writer.WriteLine("</td>");
-                                }
-                                else
-                                {
-                                    if ((currentLine = reader.ReadLine()) != null)
-                                    {
-                                        writer.WriteLine("<br>");
-                                        i = 0;
-                                        writer.Write(currentLine[i]);
-                                    }
-                                }
-                            }
                         }
 
-                        writer.WriteLine("</tr>");
+                        if (!isInQuotes)
+                        {
+                            quotesCount = 0;
+                            writer.WriteLine("</td>");
+                            writer.WriteLine("</tr>");
+                        }
+                        else
+                        {
+                            writer.WriteLine("<br>");
+                        }
                     }
 
                     writer.WriteLine("</table>");
@@ -115,14 +119,14 @@ namespace CSV
 
         static void Main(string[] args)
         {
-            string inputDocument = Path.GetFullPath("CSV.txt");
-            string outputDocument = Path.GetFullPath("HTML.html");
+            string inputDocument = args[0];
+            string outputDocument = args[1];
             
             try
             {
                 Print(outputDocument, inputDocument);
             }
-            catch(IOException e)
+            catch (IOException e)
             {
                 Console.WriteLine(e.Message);
             }
