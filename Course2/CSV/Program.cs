@@ -11,7 +11,7 @@ namespace CSV
 
             if (!inputFile.Exists)
             {
-                throw new FileNotFoundException("CSV file not found.");
+                throw new FileNotFoundException("CSV файл не найден.");
             }
 
             using (StreamWriter writer = new StreamWriter(outputDocument))
@@ -115,13 +115,14 @@ namespace CSV
 
         static void Main(string[] args)
         {
+            if (args.Length < 2)
+            {
+                Console.WriteLine("Введите, пожалуйста, два значения: путь к CSV файлу и путь к HTML файлу.");
+                return;
+            }
+
             try
             {
-                if (args.Length < 2)
-                {
-                    throw new ArgumentException("Введите, пожалуйста, два значения: путь к CSV файлу и путь к HTML файлу.");
-                }
-
                 string inputDocument = args[0];
                 string outputDocument = args[1];
 
