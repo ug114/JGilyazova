@@ -38,7 +38,7 @@ namespace CSV
                             writer.WriteLine("<tr>");
                             writer.Write("<td>");
                         }
-                        
+
                         for (int i = 0; i < currentLine.Length; i++)
                         {
                             if (currentLine[i] != ',' && currentLine[i] != '"' && currentLine[i] != '>' && currentLine[i] != '<' && currentLine[i] != '&')
@@ -49,21 +49,17 @@ namespace CSV
                             {
                                 if (currentLine[i] == '"')
                                 {
-                                    quotesCount++;
-
                                     if (i < currentLine.Length - 1 && currentLine[i + 1] == '"')
                                     {
                                         if (isInQuotes)
                                         {
-                                            writer.Write('"');
                                             i++;
                                             quotesCount++;
-                                        }
-                                        else
-                                        {
                                             writer.Write('"');
                                         }
                                     }
+
+                                    quotesCount++;
 
                                     if (quotesCount % 2 == 0)
                                     {
@@ -119,14 +115,19 @@ namespace CSV
 
         static void Main(string[] args)
         {
-            string inputDocument = args[0];
-            string outputDocument = args[1];
-            
             try
             {
+                if (args.Length < 2)
+                {
+                    throw new ArgumentException("Введите, пожалуйста, два значения: путь к CSV файлу и путь к HTML файлу.");
+                }
+
+                string inputDocument = args[0];
+                string outputDocument = args[1];
+
                 Print(outputDocument, inputDocument);
             }
-            catch (IOException e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
